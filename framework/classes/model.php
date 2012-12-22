@@ -28,7 +28,6 @@ class Model
 
 	public function __call($method, $args)
 	{
-		// call the $db_object->$name
 		if($this->db_reflection->hasMethod($method))
 		{
 			call_user_func_array(array($this->db_object, $method), $args);

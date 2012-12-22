@@ -4,6 +4,6 @@
 $config['type'] 		= 'mysql';
 $config['hostname'] 	= 'localhost';
 $config['port']			= null;
-$config['username']		= 'dynchallenge';
-$config['password']		= 'challenge';
+$config['username']		= 'mvctest';
+$config['password']		= 'mvctest123';
 $config['database']		= 'checkip';
