@@ -87,8 +87,6 @@ class Config
 				Logger::log($cme->getMessage(), Log_Level::Error);
 			}
 		}
-
-		// Logger::print_r($this->config);
 	}
 
 
@@ -112,9 +110,6 @@ class Config
 		}
 		return null;
 
-		// return isset($this->config[$parts[0]][$parts[1]])
-		// 	? $this->config[$parts[0]][$parts[1]]
-		// 	: null;
 	}
 
 
