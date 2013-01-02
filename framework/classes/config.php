@@ -3,12 +3,12 @@
 
 class Config
 {
-	private $config = array();
-
+	
 	const Config_Dir = 'config';
 	const Config_Delimiter = '.';
 	const Config_Wildcard = '*';
 
+	private $config = array();
 	private $framework_config;
 	private $application_config;
 
