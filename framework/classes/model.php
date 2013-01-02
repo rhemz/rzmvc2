@@ -3,6 +3,8 @@
 
 class Model
 {
+	const Driver_Prefix = 'Database';
+
 	protected $db_object;
 	private $db_reflection;
 
@@ -11,7 +13,8 @@ class Model
 		$config =& Config::get_instance();
 		$config->load('database');
 
-		$this->db_object = new Database_MySQL($config->get('database.*'));
+		$type = sprintf("%s_%s", self::Driver_Prefix, $config->get('database.type'));
+		$this->db_object = new $type($config->get('database.*'));
 
 		try
 		{
@@ -20,6 +23,10 @@ class Model
 		catch(Database_Connection_Exception $dce)
 		{
 			Logger::log($dce->getMessage(), Log_Level::Error);
+		}
+		catch(Database_Selection_Exception $dse)
+		{
+			Logger::log($dse->getMessage(), Log_Level::Error);
 		}
 
 		$this->db_reflection = new ReflectionClass($this->db_object);		
