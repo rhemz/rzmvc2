@@ -17,6 +17,6 @@ class IP_Model extends Model
 				FROM
 					requests";
 
-		$this->queryz($sql);
+		$this->query($sql);
 	}
 }
