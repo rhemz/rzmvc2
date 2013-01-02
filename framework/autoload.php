@@ -19,7 +19,7 @@ function __autoload($class)
 	// look in application directory first, then framework
 	foreach($paths as $path)
 	{
-		foreach(new DirectoryIterator($path) as $item)
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)) as $item)
 		{
 			if(	$item->isDir() 
 				&& !in_array($item, $nolook)
