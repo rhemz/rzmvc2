@@ -28,7 +28,12 @@ class Database_MySQL implements Database_Interface
 		$this->conn = mysql_connect($this->host, $this->user, $this->password);
 		if(!$this->conn)
 		{
-			throw new Database_Connection_Exception("Unable to connect to MySQL server using the supplied settings.");
+			throw new Database_Connection_Exception('MySQL', $this->host, $this->port, $this->user, $this->password);
+		}
+
+		if(!mysql_select_db($this->database, $this->conn))
+		{
+			throw new Database_Selection_Exception(sprintf("Could not use the specified MySQL database (%s) on %s", $this->database, $this->host));
 		}
 	}
 
