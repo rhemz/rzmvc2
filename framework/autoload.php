@@ -19,10 +19,10 @@ function __autoload($class)
 	// look in application directory first, then framework
 	foreach($paths as $path)
 	{
-		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)) as $item)
+		foreach(new RecursiveIteratorIterator($i = new RecursiveDirectoryIterator($path)) as $item)
 		{
-			if(	$item->isDir() 
-				&& !in_array($item, $nolook)
+			if( $item->isDir() 
+				&& !in_array($i, $nolook)
 				&& file_exists($p = $item->getPathname() . DIRECTORY_SEPARATOR . strtolower($class) . PHP_EXT))
 			{
 				require_once($p);

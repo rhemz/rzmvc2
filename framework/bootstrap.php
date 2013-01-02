@@ -1,7 +1,6 @@
 <?php
 
 require_once(FRAMEWORK_PATH . 'autoload.php');
-require_once(FRAMEWORK_PATH . 'classes' . DIRECTORY_SEPARATOR . 'environment.php');
 
 $config =& Config::get_instance();
 $config->load(array('environment', 'paths', 'routes'));
