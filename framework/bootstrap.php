@@ -5,6 +5,10 @@ require_once(FRAMEWORK_PATH . 'autoload.php');
 $config =& Config::get_instance();
 $config->load(array('environment', 'paths', 'routes'));
 
+if(!$config->user_config_exists('environment'))
+{
+	Logger::log('No application environment setting present, falling back to framework default', Log_Level::Warning);
+}
 define('ENVIRONMENT', $config->get('environment.environment'));
 
 $base = APPLICATION_PATH . $config->get('paths.controllers') . DIRECTORY_SEPARATOR;

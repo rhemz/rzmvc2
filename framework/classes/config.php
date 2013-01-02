@@ -130,6 +130,12 @@ class Config
 		return $config;
 	}
 
+
+	public function user_config_exists($file)
+	{
+		return file_exists(sprintf($this->application_config, $file));
+	}
+
 }
 
 
