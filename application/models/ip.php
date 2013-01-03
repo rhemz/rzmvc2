@@ -15,9 +15,13 @@ class IP_Model extends Model
 					ip_address,
 					time
 				FROM
-					requests";
+					requests
+				WHERE
+					ip_address = ?
+				AND
+					user_agent = ?";
 
-		if($this->query($sql))
+		if($this->query($sql, array('10.49.136.176', 'UnitTest Useragent')))
 		{
 			Logger::print_r($this->result());
 		}
