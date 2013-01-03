@@ -9,11 +9,24 @@ class Test_Controller extends Controller
 	}
 
 
-	public function index($var1 = null, $var2 = null)
+	public function index($var1 = null, $var2 = null, $var3 = null, $var4 = null, $var5 = null)
 	{
-		Logger::print_r(sprintf("var1: %s, var2: %s", $var1, $var2));
+		Logger::print_r(sprintf("var1: %s, var2: %s, var3: %s, var4: %s, var5: %s", $var1, $var2, $var3, $var4, $var5));
 
 		$ipmodel = new Ip_Model();
 		$ipmodel->get_records();
+	}
+
+
+	public function mssql()
+	{
+
+	}
+
+
+	public function input()
+	{
+		echo Input::ip();
+		echo Input::user_agent();
 	}
 }
