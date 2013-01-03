@@ -13,7 +13,7 @@ interface Database_Interface
 
 	public function close();
 
-	public function escape();
+	public function escape($str);
 
 }
 

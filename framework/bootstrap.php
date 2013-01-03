@@ -3,7 +3,7 @@
 require_once(FRAMEWORK_PATH . 'autoload.php');
 
 $config =& Config::get_instance();
-$config->load(array('environment', 'paths', 'routes'));
+$config->load(array('environment', 'logging', 'paths', 'routes'));
 
 if(!$config->user_config_exists('environment'))
 {

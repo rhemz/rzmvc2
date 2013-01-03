@@ -4,6 +4,8 @@ define('APPLICATION_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../applicat
 
 define('FRAMEWORK_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../framework') . DIRECTORY_SEPARATOR);
 
+define('LOG_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../logs') . DIRECTORY_SEPARATOR);
+
 define('PHP_EXT', '.php');
 
 

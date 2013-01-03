@@ -17,6 +17,9 @@ class IP_Model extends Model
 				FROM
 					requests";
 
-		$this->query($sql);
+		if($this->query($sql))
+		{
+			Logger::print_r($this->result());
+		}
 	}
 }
