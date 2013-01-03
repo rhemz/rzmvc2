@@ -15,7 +15,7 @@ class Rz_MVC
 	}
 
 
-	public function load_view($view, $data)
+	public function load_view($view, $data = null)
 	{
 		if(!is_null($data) && sizeof($data))
 		{
@@ -25,7 +25,14 @@ class Rz_MVC
 			}
 		}
 
-		include(APPLICATION_PATH . $this->config->get('paths.views') . DIRECTORY_SEPARATOR . $view . PHP_EXT);
+		if(file_exists($v = APPLICATION_PATH . $this->config->get('paths.views') . DIRECTORY_SEPARATOR . $view . PHP_EXT))
+		{
+			include_once($v);
+		}
+		else
+		{
+			Logger::log(sprintf("View: %s cannot be found", $view), Log_Level::Error);
+		}
 	}
 
 
