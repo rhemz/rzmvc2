@@ -13,8 +13,7 @@ define('ENVIRONMENT', $config->get('environment.environment'));
 
 $base = APPLICATION_PATH . $config->get('paths.controllers') . DIRECTORY_SEPARATOR;
 
-$uri = preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']);
-$uri = substr($uri, -1) == '/' ? substr($uri, 0, -1) : $uri; // incorporate this into regex
+$uri = rtrim(preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']), '/');
 
 // check for predefined route first.  todo: revise for arguments in URI segments
 if(array_key_exists($uri, ($mapping = $config->get('routes.mappings'))))
@@ -55,7 +54,8 @@ if(isset($controller) && is_object($controller) && $controller->_has_method($fun
 }
 else
 {
-	// todo: abstract this somewhere
 	header(HTTP_Status_Code::Not_Found);
-	echo 'not found';
+
+	$mvc =& get_mvc();
+	$mvc->load_view('common/404');
 }
