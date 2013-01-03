@@ -13,6 +13,9 @@ class Database_MySQL implements Database_Interface
 	private $password;
 	private $database;
 
+	private $result;
+
+
 	public function __construct($config)
 	{
 		$this->port = is_null($config['port']) ? self::Default_Port : $config['port'];
@@ -40,24 +43,40 @@ class Database_MySQL implements Database_Interface
 
 	public function query($sql)
 	{
-		echo $sql;
+		if(!$this->result = mysql_query($sql, $this->conn))
+		{
+			Logger::log(mysql_error(), Log_Level::Warning);
+			// throw error or return false
+		}
+		return true;
 	}
 
 
 	public function result()
 	{
+		$result = array();
+		if(mysql_num_rows($this->result) > 0)
+		{
+			while($row = mysql_fetch_assoc($this->result))
+			{
+				$result[] = $row;
+			}
 
+			mysql_free_result($this->result);
+
+			return new Result_Set($result);
+		}
 	}
 
 
 	public function close()
 	{
-
+		mysql_close($this->conn);
 	}
 
 
-	public function escape()
+	public function escape($str)
 	{
-
+		return mysql_real_escape_string($str);
 	}
 }
