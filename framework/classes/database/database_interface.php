@@ -7,14 +7,13 @@ interface Database_Interface
 
 	public function connect();
 	
-	public function query($sql);
+	public function query($sql, $bindings = null);
 
 	public function result();
 
 	public function close();
 
 	public function escape($str);
-
 }
 
 

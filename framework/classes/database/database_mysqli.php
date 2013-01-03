@@ -1,7 +1,7 @@
 <?php
 
 
-class Database_MySQL implements Database_Interface
+class Database_MySQLi implements Database_Interface
 {
 	const Default_Port = 3306;
 
@@ -28,24 +28,20 @@ class Database_MySQL implements Database_Interface
 
 	public function connect()
 	{
-		$this->conn = mysql_connect($this->host, $this->user, $this->password);
-		if(!$this->conn)
-		{
-			throw new Database_Connection_Exception('MySQL', $this->host, $this->port, $this->user, $this->password);
-		}
+		$this->conn = new mysqli($this->host, $this->user, $this->password, $this->database);
 
-		if(!mysql_select_db($this->database, $this->conn))
+		if($this->conn->connect_error)
 		{
-			throw new Database_Selection_Exception(sprintf("Could not use the specified MySQL database (%s) on %s", $this->database, $this->host));
+			throw new Database_Connection_Exception('MySQLi', $this->host, $this->port, $this->user, $this->password);
 		}
 	}
 
 
 	public function query($sql, $bindings = null)
 	{
-		if(!$this->result = mysql_query((is_null($bindings) ? $sql : $this->parse_bindings($sql, $bindings)), $this->conn))
+		if(!$this->result = $this->conn->query(is_null($bindings) ? $sql : $this->parse_bindings($sql, $bindings)))
 		{
-			Logger::log(mysql_error(), Log_Level::Warning);
+			Logger::log($this->conn->mysqli_error, Log_Level::Warning);
 			// throw error or return false
 		}
 		return true;
@@ -54,15 +50,14 @@ class Database_MySQL implements Database_Interface
 
 	public function result()
 	{
-		if(mysql_num_rows($this->result) > 0)
+		if($this->result->num_rows > 0)
 		{
 			$result = array();
-			while($row = mysql_fetch_assoc($this->result))
+			while($row = $this->result->fetch_assoc())
 			{
 				$result[] = $row;
 			}
-
-			mysql_free_result($this->result);
+			$this->result->free();
 
 			return new Result_Set($result);
 		}
@@ -71,13 +66,13 @@ class Database_MySQL implements Database_Interface
 
 	public function close()
 	{
-		mysql_close($this->conn);
+		$this->conn->close();
 	}
 
 
 	public function escape($str)
 	{
-		return mysql_real_escape_string($str);
+		return $this->conn->real_escape_string($str);
 	}
 
 
@@ -114,5 +109,6 @@ class Database_MySQL implements Database_Interface
 
 		return $val;
 	}
+
 
 }
