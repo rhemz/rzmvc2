@@ -9,62 +9,52 @@ class Logger
 
 	const Write_Mode = 'a+';
 
+	private static $config;
+
 
 	public static function log($message, $level = Log_Level::Notice)
 	{
-		$config =& Config::get_instance();
-		echo $config->get('logging.log_level');
-
-		if($config->get('logging.log_level') & Log_Level::Warning)
+		// only do this once
+		if(is_null(self::$config))
 		{
-			echo 'logging warnings!';
+			$config =& Config::get_instance();
+			self::$config = $config->get('logging.*');
 		}
 
-		self::write_logfile(self::All, $message);
+		// print message if enabled
+		if(self::$config['print'])
+		{
+			echo $message;
+		}
 
+		// write to file. might end up doing more than writing a line
 		switch($level)
 		{
 			case Log_Level::Notice:
-				self::notice($message);
+				self::write_logfile(Log_Level::Notice, self::Notice, $message);
 				break;
 
 			case Log_Level::Warning:
-				self::warning($message);
+				self::write_logfile(Log_Level::Warning, self::Warning, $message);
 				break;
 
 			case Log_Level::Error:
-				self::error($message);
+				self::write_logfile(Log_Level::Error, self::Error, $message);
+				exit(); // die on error level.  maybe should not?
 				break;
 		}
 	}
 
 
-	// these methods will do something more than just echo
-
-	private static function notice($message)
+	private static function write_logfile($level, $file, $message)
 	{
-		echo $message;
-		self::write_logfile(self::Notice, $message);
-	}
-
-	private static function warning($message)
-	{
-		echo $message;
-		self::write_logfile(self::Warning, $message);
-	}
-
-	private static function error($message)
-	{
-		echo $message;
-		self::write_logfile(self::Error, $message);
-		exit();
-	}
-
-	private static function write_logfile($file, $message)
-	{
-		$handle = fopen(LOG_PATH . DIRECTORY_SEPARATOR . $file, self::Write_Mode);
-		fwrite($handle, sprintf("%s: %s%s", date(DATE_RFC822), $message, PHP_EOL));
-		fclose($handle);
+		// check bitmask
+		if(self::$config['write_file'] && (self::$config['log_level'] & $level))
+		{
+			$handle = fopen(LOG_PATH . DIRECTORY_SEPARATOR . $file, self::Write_Mode);
+			fwrite($handle, sprintf("%s: %s%s", date(DATE_RFC822), $message, PHP_EOL));
+			fclose($handle);
+		}
 	}
 
 
