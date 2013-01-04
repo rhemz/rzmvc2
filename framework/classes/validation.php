@@ -30,25 +30,51 @@
 
 class Validation
 {
-
+	private $reflection;
 	private $keys = array();
-	private $rules = array();
+	private $last;
 
 
 	public function __construct()
 	{
-
+		$this->reflection = new ReflectionClass($this);
 	}
 
 
 	public function register($key, $readable = null)
 	{
-		
+		if(!array_key_exists($key, $this->keys))
+		{
+			$this->last = $key;
+			$this->keys[$this->last] = array();
+		}
+		else
+		{
+			Logger::Log(sprintf("%s has already been registered for validation", $key), Log_Level::Warning);
+		}
+
+		return $this;
 	}
 
 
 	public function rule($rule, $param = null)
 	{
+		if($this->reflection->hasMethod($rule) && !is_null($this->last))
+		{
+			$this->keys[$this->last][$rule] = $param;
+		}
+		else
+		{
+			Logger::Log(sprintf("Rule '%s' does not exist, ignoring", $rule));
+		}
+		
+		return $this;
+	}
+
+
+	public function validate()
+	{
+		$this->last = null;
 
 	}
 

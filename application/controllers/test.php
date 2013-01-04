@@ -33,5 +33,17 @@ class Test_Controller extends Controller
 	public function validation()
 	{
 		$val = new Validation();
+
+		$val->register('testval')
+			->rule('min_length', 5)
+			->rule('max_length', 20);
+
+		$val->register('testval2')
+			->rule('required')
+			->rule('is_numeric')
+			->rule('min_val', 1)
+			->rule('max_val', 100);
+
+		Logger::print_r($val);
 	}
 }
