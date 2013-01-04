@@ -35,6 +35,7 @@ class Test_Controller extends Controller
 		$val = new Validation();
 
 		$val->register('testval')
+			->rule('required')
 			->rule('min_length', 5)
 			->rule('max_length', 20);
 

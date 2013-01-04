@@ -184,9 +184,7 @@ class Validation
 	private function valid_emails($key)
 	{
 		// if newline exists in value, explode on newline, otherwise assume comma delimited
-		$emails = strpos($_REQUEST[$key], "\n") !== fals
-			? explode("\n", $_REQUEST[$key])
-			: explode(',', $_REQUEST[$key]);
+		$emails = explode((strpos($_REQUEST[$key], "\n") !== false ? "\n" : ","), $_REQUEST[$key]);
 
 		if(!is_array($emails) || !sizeof($emails))
 		{
