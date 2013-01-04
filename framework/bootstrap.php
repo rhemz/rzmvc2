@@ -56,6 +56,7 @@ else
 {
 	header(HTTP_Status_Code::Not_Found);
 
-	$mvc =& get_mvc();
-	$mvc->load_view('common/404');
+	// make generic controller and show 404 page
+	$controller = new Controller();
+	$controller->load_view('common/404');
 }
