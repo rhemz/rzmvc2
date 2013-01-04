@@ -29,4 +29,9 @@ class Test_Controller extends Controller
 		echo Input::ip();
 		echo Input::user_agent();
 	}
+
+	public function validation()
+	{
+		$this->load('validation');
+	}
 }
