@@ -2,7 +2,7 @@
 
 
 
- class Database_PostgreSQL
+ class Database_PostgreSQL implements Database_Interface
  {
 
  	public function __construct($config)

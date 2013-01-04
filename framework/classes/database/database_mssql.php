@@ -1,7 +1,7 @@
 <?php
 
 
-class Database_MSSQL
+class Database_MSSQL implements Database_Interface
 {
 	public function __construct($config)
 	{
