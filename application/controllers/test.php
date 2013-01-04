@@ -34,12 +34,12 @@ class Test_Controller extends Controller
 	{
 		$val = new Validation();
 
-		$val->register('testval')
+		$val->register('testval', 'Test Value 1')
 			->rule('required')
 			->rule('min_length', 5)
 			->rule('max_length', 20);
 
-		$val->register('testval2')
+		$val->register('testval2', 'Test Value 2')
 			->rule('required')
 			->rule('is_numeric')
 			->rule('min_val', 1)
