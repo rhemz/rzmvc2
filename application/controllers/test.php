@@ -32,6 +32,6 @@ class Test_Controller extends Controller
 
 	public function validation()
 	{
-		$this->load('validation');
+		$val = new Validation();
 	}
 }
