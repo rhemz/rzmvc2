@@ -31,7 +31,8 @@
 class Validation
 {
 	private $reflection;
-	private $keys = array();
+	private $rules = array();
+	private $readable = array();
 	private $last;
 
 
@@ -43,10 +44,11 @@ class Validation
 
 	public function register($key, $readable = null)
 	{
-		if(!array_key_exists($key, $this->keys))
+		if(!array_key_exists($key, $this->rules))
 		{
 			$this->last = $key;
-			$this->keys[$this->last] = array();
+			$this->rules[$this->last] = array();
+			$this->readable[$this->last] = $readable;
 		}
 		else
 		{
@@ -61,7 +63,7 @@ class Validation
 	{
 		if($this->reflection->hasMethod($rule) && !is_null($this->last))
 		{
-			$this->keys[$this->last][$rule] = $param;
+			$this->rules[$this->last][$rule] = $param;
 		}
 		else
 		{
