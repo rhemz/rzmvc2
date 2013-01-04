@@ -1,6 +1,6 @@
 <?php
 
-require_once(FRAMEWORK_PATH . 'autoload.php');
+require_once(FRAMEWORK_PATH . 'autoload' . PHP_EXT);
 
 $config =& Config::get_instance();
 $config->load(array('environment', 'logging', 'paths', 'routes'));
