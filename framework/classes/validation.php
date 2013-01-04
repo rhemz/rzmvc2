@@ -80,7 +80,7 @@ class Validation
 		}
 		else
 		{
-			Logger::Log(sprintf("%s has already been registered for validation", $key), Log_Level::Warning);
+			Logger::Log(sprintf("%s has already been registered for validation", $key), Log_Level::Error);
 		}
 
 		return $this;
