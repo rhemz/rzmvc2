@@ -27,11 +27,11 @@ class Rz_MVC
 
 		if(file_exists($v = APPLICATION_PATH . $this->config->get('paths.views') . DIRECTORY_SEPARATOR . $view . PHP_EXT))
 		{
-			include_once($v);
+			include($v);
 		}
 		else
 		{
-			Logger::log(sprintf("View: %s cannot be found", $view), Log_Level::Error);
+			Logger::log(sprintf("%s view cannot be found", $view), Log_Level::Error);
 		}
 	}
 
