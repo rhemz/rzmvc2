@@ -31,6 +31,10 @@
 class Validation
 {
 
+	private $keys = array();
+	private $rules = array();
+
+
 	public function __construct()
 	{
 
@@ -39,13 +43,13 @@ class Validation
 
 	public function register($key, $readable = null)
 	{
-
+		
 	}
 
 
 	public function rule($rule, $param = null)
 	{
-		
+
 	}
 
 
@@ -77,7 +81,9 @@ class Validation
 
 	private function match_regex($key, $pattern)
 	{
-
+		return (preg_match($pattern, $_REQUEST[$key]) == 1)
+			? true
+			: false;
 	}
 
 
@@ -129,26 +135,46 @@ class Validation
 	}
 
 
-	private function valid_ip($key)
+	private function valid_ip($key, $version = 'v4')
 	{
-
+		return $version == 'v6'
+			? filter_var($_REQUEST[$key], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+			: filter_var($_REQUEST[$key], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 	}
 
 
 	private function valid_uri($key)
 	{
-
+		return filter_var($_REQUEST[$key], FILTER_VALIDATE_URL);
 	}
 
 
 	private function valid_email($key)
 	{
-
+		return filter_var($_REQUEST[$key], FILTER_VALIDATE_EMAIL);
 	}
 
 
 	private function valid_emails($key)
 	{
+		// if newline exists in value, explode on newline, otherwise assume comma delimited
+		$emails = strpos($_REQUEST[$key], "\n") !== fals
+			? explode("\n", $_REQUEST[$key])
+			: explode(',', $_REQUEST[$key]);
 
+		if(!is_array($emails) || !sizeof($emails))
+		{
+			return false;
+		}
+
+		foreach($emails as $email)
+		{
+			if(!$this->valid_email($email))
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
