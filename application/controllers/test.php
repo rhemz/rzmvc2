@@ -44,7 +44,7 @@ class Test_Controller extends Controller
 			->rule('min_length', 5)
 			->rule('max_length', 20);
 
-		$val->register('username', 'Password')
+		$val->register('password', 'Password')
 			->rule('required')
 			->rule('is_numeric')
 			->rule('min_val', 1)
