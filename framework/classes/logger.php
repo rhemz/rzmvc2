@@ -24,7 +24,7 @@ class Logger
 		// print message if enabled
 		if(self::$config['print'])
 		{
-			echo $message;
+			echo $message . PHP_EOL;
 		}
 
 		// write to file. might end up doing more than writing a line
@@ -51,6 +51,12 @@ class Logger
 		// check bitmask
 		if(self::$config['write_file'] && (self::$config['log_level'] & $level))
 		{
+			// make logs directory if it doesn't exist
+			if(!is_dir(LOG_PATH))
+			{
+				mkdir(LOG_PATH);
+			}
+
 			$handle = fopen(LOG_PATH . DIRECTORY_SEPARATOR . $file, self::Write_Mode);
 			fwrite($handle, sprintf("%s: %s%s", date(DATE_RFC822), $message, PHP_EOL));
 			fclose($handle);

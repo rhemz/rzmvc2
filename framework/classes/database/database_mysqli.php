@@ -78,6 +78,8 @@ class Database_MySQLi implements Database_Interface
 
 	private function parse_bindings($sql, $bindings)
 	{
+		// todo: use actual mysqli lib binding
+		
 		$qbits = explode('?', $sql);
 		$i = 0;
 
