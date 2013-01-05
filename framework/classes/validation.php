@@ -5,20 +5,20 @@
 		-required (value is required)
 		-required_if (value is required if other value is present)
 		-equals (value ==)
-		-match_regex
-		-min_length
-		-max_length
-		-exact_length
-		-min_val
-		-max_val
-		-is_numeric
-		-is_int
-		-is_float
-		-valid_ip
-		-valid_uri
-		-valid_email
-		-valid_emails
-		-custom
+		-match_regex (value matches a perl regular expression)
+		-min_length (value is at least N characters
+		-max_length (value is less than or equal to N characters)
+		-exact_length (value is exactly this long)
+		-min_val (numeric value is at least this)
+		-max_val (numeric value is less than or equal to this)
+		-is_numeric (value is a valid number)
+		-is_int (value is a valud integer)
+		-is_float (value is a valid float)
+		-valid_ip (value is a valid IP address)
+		-valid_uri (value is a valid URI)
+		-valid_email (value is a valid email address)
+		-valid_emails (value is a newline or comma delimited set of valid email addresses)
+		-custom (allows user to use define a custom validation callback)
 
 	Syntax:
 		$validation->register('fieldname', 'Readable Name')
