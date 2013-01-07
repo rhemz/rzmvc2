@@ -51,6 +51,30 @@ class Input
 
 
 	/**
+	* Determine whether or not a value is present in a given HTTP request or header context.
+	* @param string $key The key to test for the presence of
+	* @param string $method The HTTP method (get, post, cookie)
+	* @return boolean
+	*/
+	public static function is_present($key, $method = 'post')
+	{
+		switch(strtolower($method))
+		{
+			case 'get':
+				$source =& $_GET;
+				break;
+			case 'cookie':
+				$source =& $_COOKIE;
+				break;
+			default:
+				$source =& $_POST;
+				break;
+		}
+		return isset($source[$key]) && !is_null($source[$key]) && strlen($source[$key]);
+	}
+
+
+	/**
 	* Get the client's accessing IP address.  If for whatever reason it is not available, fall back to 0.0.0.0
 	* @return string
 	*/
