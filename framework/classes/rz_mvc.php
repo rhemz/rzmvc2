@@ -1,12 +1,19 @@
 <?php
 
 
+/**
+* Base MVC class that all Controllers inherit from.  Responsible for making Config accessible to controllers
+* and loading views
+*/
 class Rz_MVC
 {
 	private static $instance;
 	public $config;
 	
 
+	/**
+	* Create instance of Rz_MVC, set singleton
+	*/
 	public function __construct()
 	{
 		self::$instance =& $this;
@@ -15,6 +22,11 @@ class Rz_MVC
 	}
 
 
+	/**
+	* Load a view template, and make the data passed accessible within a local context
+	* @param string $view The path to the view
+	* @param array|null $data Data to make accessible to view
+	*/
 	public function load_view($view, $data = null)
 	{
 		if(!is_null($data) && sizeof($data))
@@ -36,6 +48,9 @@ class Rz_MVC
 	}
 
 
+	/**
+	* Get the Rz_MVC singleton instance
+	*/
 	public static function &get_instance()
 	{
 		return self::$instance;
@@ -45,8 +60,8 @@ class Rz_MVC
 }
 
 
-/*
-	Shortcut for &Rz_MVC::get_instance()
+/**
+*	Shortcut for &Rz_MVC::get_instance()
 */
 function &get_mvc()
 {
