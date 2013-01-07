@@ -21,10 +21,10 @@ class Logger
 			self::$config = $config->get('logging.*');
 		}
 
-		// print message if enabled
-		if(self::$config['print'])
+		// print message if enabled for the log level
+		if(self::$config['print'] & $level)
 		{
-			echo $message . PHP_EOL;
+			echo sprintf("%s %s %s %s", PHP_EOL, $message, (self::$config['print_html'] ? '<br />' : null), PHP_EOL);
 		}
 
 		// write to file. might end up doing more than writing a line
