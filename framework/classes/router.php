@@ -2,7 +2,7 @@
 
 class Router
 {
-  private $incoming;
+ 	private $incoming;
 	private $path;
 	private $index = 0;
 	private $config;
