@@ -64,12 +64,21 @@ class Validation
 
 
 
+	/**
+	* Create a new Validation instance
+	*/
 	public function __construct()
 	{
 		$this->reflection = new ReflectionClass($this);
 	}
 
 
+	/**
+	* Register a user input for validation.  Generally followed by chained rule()s
+	* @param string $key The input (GET, POST, etc) key
+	* @param boolean $readable The human readable version of said key
+	* @return $this
+	*/
 	public function register($key, $readable = null)
 	{
 		if(!array_key_exists($key, $this->rules))
@@ -87,6 +96,12 @@ class Validation
 	}
 
 
+	/**
+	* Add a rule to the last registered input key.  Refer to the comment at the top for all available rules.
+	* @param string $rule The rule to use
+	* @param mixed $param The optional value to be used (i.e. maximum length, value to match, etc)
+	* @return $this
+	*/
 	public function rule($rule, $param = null)
 	{
 		if($this->reflection->hasMethod($rule) && !is_null($this->last))
@@ -102,6 +117,10 @@ class Validation
 	}
 
 
+	/**
+	* Run the currently registered validation rules.
+	* @return boolean
+	*/
 	public function validate()
 	{
 		if($this->form_submitted())
@@ -131,36 +150,77 @@ class Validation
 	}
 
 
-	public function message($key)
+	/**
+	* Get the error message (if set) for a given key.
+	* @param string $key The input key to retrieve
+	* @param string $prefix String to prefix the message with, e.g. <span class="error">
+	* @param string $suffix String to suffix the message with
+	* @return string|null
+	*/
+	public function message($key, $prefix = null, $suffix = null)
 	{
-		return isset($this->messages[$key]) ? $this->messages[$key] : '';
+		return isset($this->messages[$key]) ? sprintf("%s%s%s", $prefix, $this->messages[$key], $suffix) : null;
 	}
 
 
+	/**
+	* Get the user-submitted value (usually used while settings persisting submitted values in forms on error)
+	* @param string $key The input key
+	*/
 	public function value($key)
 	{
 		return isset($this->values[$key]) ? $this->values[$key] : null;
 	}
 
 
+	/**
+	* @param string $key The input key
+	* @return boolean
+	*/
+	public function error($key)
+	{
+		return isset($this->messages[$key]);
+	}
+
+
+	/**
+	* Quick check to see if a form has been submitted
+	* @return boolean
+	*/
 	private function form_submitted()
 	{
 		return isset($_POST) && sizeof($_POST) > 0;
 	}
 
 
+	/**
+	* Check to see if a key is present in POST
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function is_present($key)
 	{
 		return isset($_POST[$key]) && !is_null($_POST[$key]) && strlen($_POST[$key]);
 	}
 
 
+	/**
+	* Specify an input as required
+	* @param string $key The key
+	* @return boolean
+	*/
 	private function required($key)
 	{
 		return $this->is_present($key);
 	}
 
 
+	/**
+	* Input value A is required if B is present
+	* @param string $key Value A
+	* @param string $dependent Value B
+	* @return boolean
+	*/
 	private function required_if($key, $dependent)
 	{
 		return $this->is_present($dependent) 
@@ -169,6 +229,12 @@ class Validation
 	}
 
 
+	/**
+	* Test to see if a given user input equals the specified value
+	* @param string key The input key
+	* @param mixed value The value to match
+	* @return boolean
+	*/
 	private function equals($key, $value)
 	{
 		return Input::post($key) == $value;

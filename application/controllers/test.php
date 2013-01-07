@@ -39,12 +39,12 @@ class Test_Controller extends Controller
 	{
 		$val = new Validation();
 
-		$val->register('username', 'Username')
+		$val->register('username', 'Your username')
 			->rule('required')
 			->rule('min_length', 5)
 			->rule('max_length', 20);
 
-		$val->register('password', 'Password')
+		$val->register('password', 'Your password')
 			->rule('required')
 			->rule('is_numeric')
 			->rule('min_val', 1)
