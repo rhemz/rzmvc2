@@ -23,7 +23,7 @@ class Test_Controller extends Controller
 		$config =& Config::get_instance();
 		$config->load('database');
 
-		$db = new Database_MSSQL($config->get('database.*'));
+		$db = new Database_PDO_MSSQL($config->get('database.*'));
 		$db->connect();
 	}
 
