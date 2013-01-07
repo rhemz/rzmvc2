@@ -1,6 +1,10 @@
 <?php
 
 
+/**
+* The class all user defined Models inherit from.  Responsible for instantiating the appropriate
+* database driver from the application configuration and passing method calls onto said driver.
+*/
 class Model
 {
 	const Driver_Prefix = 'Database';
@@ -8,6 +12,10 @@ class Model
 	protected $db_object;
 	private $db_reflection;
 
+	/**
+	* Create an instance of the Model class.  Never called directly.  Load the database configuration and create
+	* a new/use existing connection to said database.
+	*/
 	public function __construct()
 	{
 		$config =& Config::get_instance();
@@ -33,7 +41,10 @@ class Model
 	}
 
 
-	// call the corresponding loaded driver method
+	/**
+	* Overloaded PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
+	* to pass said call onto the database driver file.
+	*/
 	public function __call($method, $args)
 	{
 		if($this->db_reflection->hasMethod($method))
