@@ -231,7 +231,7 @@ class Validation
 
 	/**
 	* Test to see if a given user input equals the specified value
-	* @param string key The input key
+	* @param string $key The input key
 	* @param mixed value The value to match
 	* @return boolean
 	*/
@@ -241,6 +241,12 @@ class Validation
 	}
 
 
+	/**
+	* Test a given user input against a Perl Regular Expression 
+	* @param string $key The input key
+	* @param string $pattern The regular expression pattern
+	* @return boolean
+	*/
 	private function match_regex($key, $pattern)
 	{
 		return (preg_match($pattern, Input::post($key)) == 1)
@@ -249,54 +255,105 @@ class Validation
 	}
 
 
+	/**
+	* Ensure a given user input is at least N characters long
+	* @param string $key The input key
+	* @param int $length The minimum length
+	* @return boolean
+	*/
 	private function min_length($key, $length = 0)
 	{
 		return strlen(Input::post($key)) >= $length;
 	}
 
 
+	/**
+	* Ensure a given user input is less than or equal to N characters
+	* @param string $key The input key
+	* @param int $length The maximum length
+	* @return boolean
+	*/
 	private function max_length($key, $length = PHP_INT_MAX)
 	{
 		return strlen(Input::post($key)) <= $length;
 	}
 
 
+	/**
+	* Ensure a given user input is exactly N characters long
+	* @param string $key The input key
+	* @param int $length The length $key must equal
+	* @return boolean
+	*/
 	private function exact_length($key, $length)
 	{
 		return strlen(Input::post($key)) == $length;
 	}
 
 
+	/**
+	* Ensure a given numerical user input is at least N
+	* @param string $key The input key
+	* @param int $val The minimum value
+	* @return boolean
+	*/
 	private function min_val($key, $val)
 	{
 		return is_numeric(Input::post($key)) && (int)Input::post($key) >= (int)$val;
 	}
 
 
+	/**
+	* Ensure a given numerical user input is less than or equal to N
+	* @param string $key The input key
+	* @param int $val The maximum value
+	* @return boolean
+	*/
 	private function max_val($key, $val)
 	{
 		return is_numeric(Input::post($key)) && (int)Input::post($key) <= (int)$val;
 	}
 
 
+	/**
+	* Ensure a given user input is a valid numeric value
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function is_numeric($key)
 	{
 		return is_numeric(Input::post($key));
 	}
 
 
+	/**
+	* Ensure a given user input is a valid integer
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function is_int($key)
 	{
 		return is_int(Input::post($key));
 	}
 
 
+	/**
+	* Ensure a given user input is a valid float
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function is_float($key)
 	{
 		return is_float(Input::post($key));
 	}
 
 
+	/**
+	* Ensure a given user input is a valid IPv4 or IPv6 address
+	* @param string $key The input key
+	* @param string $version 'v4' or 'v6'
+	* @return boolean
+	*/
 	private function valid_ip($key, $version = 'v4')
 	{
 		return $version == 'v6'
@@ -305,18 +362,33 @@ class Validation
 	}
 
 
+	/**
+	* Ensure a given user input is a valid URI
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function valid_uri($key)
 	{
 		return filter_var(Input::post($key), FILTER_VALIDATE_URL);
 	}
 
 
+	/**
+	* Ensure a given user input is a valid email address according to RFC 5321
+	* @param string $key The input key
+	* @param return boolean
+	*/
 	private function valid_email($key)
 	{
 		return filter_var(Input::post($key), FILTER_VALIDATE_EMAIL);
 	}
 
 
+	/**
+	* Ensure a given user input is a valid list of comma/newline delimited email addresses
+	* @param string $key The input key
+	* @return boolean
+	*/
 	private function valid_emails($key)
 	{
 		// if newline exists in value, explode on newline, otherwise assume comma delimited
@@ -339,6 +411,14 @@ class Validation
 	}
 
 
+	/**
+	* Test a given user input against a user-defined custom callback function.  The callback must take 2 parameters,
+	* a value, and a message reference ($val, &$message), and return a boolean.  The user is responsible for setting 
+	* the custom error message for this function, by setting $message within the method context.
+	* @param string $key The input key
+	* @param string $callback The static callback method, e.g. 'SomeValidationClass:validate_me'
+	* @return boolean
+	*/ 
 	private function custom($key, $callback)
 	{
 		if(sizeof($call = explode(self::Static_Callback_Delimeter, $callback)) == 2 && method_exists($call[0], $call[1]))
