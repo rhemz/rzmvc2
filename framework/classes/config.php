@@ -107,6 +107,14 @@ class Config
 	}
 
 
+	/**
+	* Get a configuration value by means of a config query.
+	* Format is as follows:
+	* 		file.key - returns a specific value existing in the file (e.g. database.hostname)
+	*		file.* - returns the full configuration array defined in the given file (e.g. routes.*)
+	* @param string $key Configuration query path
+	* @return mixed The configuration query result
+	*/
 	public function get($key)
 	{
 		$parts = explode(self::Config_Delimiter, $key);
@@ -130,6 +138,9 @@ class Config
 	}
 
 
+	/**
+	* Return the contents of a given configuration file path.  Used internally by the Config class
+	*/
 	private function get_contents($path)
 	{
 		if(!file_exists($path))
