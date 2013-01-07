@@ -1,17 +1,40 @@
 <?php
 
+/**
+* The Router class is responsible for mapping an incoming URI to a corresponding action belonging
+* to a Controller.  The first step is to see if the incoming URI matches any specific user-programmed
+* 'vanity' patterns (e.g. mapping '/user/123' to '/account/user/view/123').  If no matches are found,
+* the Router will begin traversing the application/controllers/ directory, trying to match the earliest
+* possible incoming URI segment with a corresponding Controller.  If a matching Controller is found, the
+* Router tests for the presence of the next incoming URI segment in the form of a member function belonging 
+* to said controller.  If it exists, it is invoked, passing any additional URI segments as optional parameters.
+*
+* Vanity routes are defined in application/config/routes.php file and must follow this format:
+*	'/something/%var'      => '/somethingelse/$1'
+*	'/foo/%var/bar/%var'   => '/bar/$1/foo/$2'
+*	/woot/%var/%var/%var   => '/foo/$3/$2/$1'
+* where the $1 - $n are replaced by the corresponding wildcards in the order they appear.  The $n values can
+* appear in any order.
+*/
 class Router
 {
- 	private $incoming;
+	const Wildcard = '%var';
+
+	private $incoming;
 	private $path;
 	private $index = 0;
 	private $config;
-	
+
 	private $controller_base;
 	private $controller_name;
 	private $controller_obj;
 	private $action;
 
+
+	/**
+	* Create a new instance of Router from an incoming URI.
+	* @param string $uri The incoming URI (usually requested by a browser)
+	*/
 	public function __construct($uri)
 	{
 		$this->incoming = $uri;
@@ -23,13 +46,14 @@ class Router
 	}
 
 
+	/**
+	* Check to see if there is any matching vanity route or Controller->action mapping that corresponds to the 
+	* incoming URI this instance of Router was initialized with.
+	* @return boolean
+	*/
 	public function check_route()
 	{
-		// check for predefined route first.  todo: revise for arguments in URI segments
-		if(array_key_exists($this->incoming, ($mapping = $this->config->get('routes.mappings'))))
-		{
-			$this->incoming = $mapping[$uri];
-		}
+		$this->eval_custom_routes($this->config->get('routes.mappings'));
 
 		// map URI to controller
 		$this->path = explode('/', trim(substr($this->incoming, 1), '/'));
@@ -63,6 +87,10 @@ class Router
 	}
 
 
+	/**
+	* Called by the rz_mvc bootstrap if a matching route is found.  Calls the appropriate Controller action & passes
+	* along any parameters existing in the incoming URI
+	*/
 	public function execute_route()
 	{
 		sizeof($args = array_slice($this->path, ++$this->index))
@@ -71,7 +99,49 @@ class Router
 	}
 
 
-	public function show_404()
+	/**
+	* Test for any matches between the incoming URI and the application-defined vanity routes.
+	* @param Array $routes The application routes configuration
+	*/
+	private function eval_custom_routes($routes)
+	{
+		foreach($routes as $inc => $dest)
+		{
+			$r_parts = explode('/', trim(substr($inc, 1), '/'));
+			$i_parts = explode('/', trim(substr($this->incoming, 1), '/'));
+
+			$matched = true;
+			for($i=0; $i<sizeof($r_parts); $i++)
+			{
+				if((@($r_parts[$i] != $i_parts[$i])) && $r_parts[$i] != self::Wildcard)
+				{
+					$matched = false;
+					break;
+				}
+			}
+
+			if($matched)
+			{
+				$marker = 0;
+				for($i=0; $i<sizeof($r_parts); $i++)
+				{
+					if($r_parts[$i] == self::Wildcard)
+					{
+						$dest = @str_replace(sprintf('$%s', ++$marker), $i_parts[$i], $dest);
+					}
+				}
+				$this->incoming = $dest;
+				return;
+			}
+		}
+	}
+
+
+	/**
+	* Send the appropriate HTTP 404 Not Found headers and show the default 404 Page.
+	* Static function, so it can be called from user Controllers if desired.
+	*/
+	public static function show_404()
 	{
 		header(HTTP_Status_Code::Not_Found);
 
