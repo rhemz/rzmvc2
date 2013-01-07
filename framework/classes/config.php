@@ -1,6 +1,10 @@
 <?php
 
 
+/**
+* Class responsible for loading configuration files and making values contained therein accessible
+* via queries.
+*/
 class Config
 {
 	
@@ -16,6 +20,9 @@ class Config
 
 
 
+	/**
+	* Create instance of Config.  Never called directly, only by static method get_instance()
+	*/
 	public function __construct()
 	{
 		$this->framework_config = FRAMEWORK_PATH . self::Config_Dir . DIRECTORY_SEPARATOR . '%s' . PHP_EXT;
@@ -23,6 +30,9 @@ class Config
 	}
 
 
+	/**
+	* Handle singletone instance of config.  new Config() is never called.
+	*/
 	public static function &get_instance()
 	{
 		if(is_null(self::$instance))
@@ -33,6 +43,13 @@ class Config
 	}
 
 
+	/**
+	* Load any number of configuration files.  If an application configuration file is not present, the corresponding
+	* framework config will be loaded.  If that does not exist, an error is thrown.
+	* @param string|Array $files Config file(s)
+	* @throws Config_Not_Found_Exception
+	* @throws Config_Malformed_Exception
+	*/
 	public function load($files)
 	{
 		/*
