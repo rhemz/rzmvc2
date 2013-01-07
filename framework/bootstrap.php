@@ -3,60 +3,19 @@
 require_once(FRAMEWORK_PATH . 'autoload' . PHP_EXT);
 
 $config =& Config::get_instance();
-$config->load(array('environment', 'logging', 'paths', 'routes'));
+$config->load(array('environment', 'logging'));
 
 if(!$config->user_config_exists('environment'))
 {
 	Logger::log('No application environment setting present, falling back to framework default', Log_Level::Warning);
 }
-define('ENVIRONMENT', $config->get('environment.environment'));
 
-$base = APPLICATION_PATH . $config->get('paths.controllers') . DIRECTORY_SEPARATOR;
+define('ENVIRONMENT', $config->get('environment.environment'));
 
 $uri = rtrim(preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']), '/');
 
-// check for predefined route first.  todo: revise for arguments in URI segments
-if(array_key_exists($uri, ($mapping = $config->get('routes.mappings'))))
-{
-	$uri = $mapping[$uri];
-}
+$router = new Router($uri);
 
-// map URI to controller
-$uri = explode('/', trim(substr($uri, 1), '/'));
-$index = 0;
-
-foreach($uri as $segment)
-{
-	$index++;
-	if(!strlen($segment))
-	{
-		$segment = $config->get('routes.default_controller');
-	}
-	else if(is_link($base . $segment) || is_dir($base . $segment))
-	{
-		$base .= $segment . DIRECTORY_SEPARATOR;
-	}
-
-	if(is_file($base . $segment . PHP_EXT))
-	{
-		$controller = sprintf("%s_%s", $segment, $config->get('routes.controller_suffix'));
-		$controller = new $controller();
-		break;
-	}
-}
-
-$func = $index == sizeof($uri) ? $config->get('routes.default_function') : $uri[$index];
-if(isset($controller) && is_object($controller) && $controller->_has_method($func))
-{
-	sizeof($args = array_slice($uri, ++$index))
-		? call_user_func_array(array($controller, $func), $args)
-		: $controller->$func();
-}
-else
-{
-	header(HTTP_Status_Code::Not_Found);
-
-	// make generic controller and show 404 page
-	$controller = new Controller();
-	$controller->load_view('common/404');
-}
+$router->check_route()
+	? $router->execute_route()
+	: $router->show_404();
