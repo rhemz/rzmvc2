@@ -1,6 +1,8 @@
 <?php
 
-$config['type']		= 'cookie';
-$config['name']		= 'rzmvc';
+$config['type']			= 'file';
+$config['name']			= 'rzmvc';
+$config['timeout']		= 60*60*24; // 1 day
 
-$config['hash']		= 'jksOQauDP2TrCE10JvPJlsXaOKREv';
+$config['file_prefix']	= 'mvcsession_';
+$config['hash']			= 'jksOQauDP2TrCE10JvPJlsXaOKREv';

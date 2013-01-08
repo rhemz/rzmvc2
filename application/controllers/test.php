@@ -20,8 +20,7 @@ class Test_Controller extends Controller
 
 	public function mssql()
 	{
-		$config =& Config::get_instance();
-		$config->load('database');
+		$this->config->load('database');
 
 		$db = new Database_PDO_MSSQL($config->get('database.*'));
 		$db->connect();
@@ -32,6 +31,20 @@ class Test_Controller extends Controller
 	{
 		echo Input::ip();
 		echo Input::user_agent();
+	}
+
+
+	public function session_set()
+	{
+		$this->session->set('test', 'testval');
+		$this->session->set('testarray', array('key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3'));
+	}
+
+
+	public function session_get()
+	{
+		Logger::log($this->session->get('test'));
+		Logger::print_r($this->session->get('testarray'));
 	}
 
 

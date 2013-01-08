@@ -2,6 +2,9 @@
 
 require_once(FRAMEWORK_PATH . 'autoload' . PHP_EXT);
 
+// for now just invoke custom session handler -- will eventually have a framework function for custom error logging
+register_shutdown_function('session_write_close');
+
 $config =& Config::get_instance();
 $config->load(array('environment', 'logging', 'session'));
 
