@@ -9,7 +9,10 @@ class Rz_MVC
 {
 	private static $instance;
 	public $config;
-	
+	public $session;
+
+	const Session_Driver_Prefix = 'Session';
+
 
 	/**
 	* Create instance of Rz_MVC, set singleton
@@ -19,6 +22,11 @@ class Rz_MVC
 		self::$instance =& $this;
 
 		$this->config =& Config::get_instance();
+
+		// setup session
+		$session_type = sprintf("%s_%s", self::Session_Driver_Prefix, $this->config->get('session.type'));
+		$this->session = new $session_type();
+		$this->session->start();
 	}
 
 
