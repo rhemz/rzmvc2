@@ -104,10 +104,11 @@ class Router
 	*/
 	private function eval_custom_routes($routes)
 	{
+		$i_parts = explode('/', trim(substr($this->incoming, 1), '/'));
+		
 		foreach($routes as $inc => $dest)
 		{
 			$r_parts = explode('/', trim(substr($inc, 1), '/'));
-			$i_parts = explode('/', trim(substr($this->incoming, 1), '/'));
 
 			$matched = true;
 			for($i=0; $i<sizeof($r_parts); $i++)
