@@ -33,12 +33,12 @@
 class Validation
 {
 	const Static_Callback_Delimeter = '::';
+	const HTTP_Method = 'POST';
 
 	private $reflection;
 	private $rules = array();
 	private $readable = array();
 	private $last;
-	private $http_method;
 
 	public $values = array();
 	public $messages = array();
@@ -66,11 +66,9 @@ class Validation
 
 	/**
 	* Create a new Validation instance
-	* @param string $method The HTTP method to validate against.  Defaults to POST if none supplied.
 	*/
-	public function __construct($method = 'post')
+	public function __construct()
 	{
-		$this->http_method = $method;
 		$this->reflection = new ReflectionClass($this);
 	}
 
@@ -125,7 +123,7 @@ class Validation
 	*/
 	public function validate()
 	{
-		if(strtolower(Input::request_method()) != strtolower($this->http_method))
+		if(strtoupper(Input::request_method()) != self::HTTP_Method)
 		{
 			return false;
 		}
@@ -134,7 +132,7 @@ class Validation
 
 		foreach($this->rules as $key => $rules)
 		{
-			$this->values[$key] = Input::{$this->http_method}($key);
+			$this->values[$key] = Input::post($key);
 			
 			foreach($rules as $rule => $param)
 			{
@@ -203,7 +201,7 @@ class Validation
 	*/
 	private function is_present($key)
 	{
-		return Input::is_present($key, $this->http_method);
+		return Input::is_present($key, self::HTTP_Method);
 	}
 
 
@@ -240,7 +238,7 @@ class Validation
 	*/
 	private function equals($key, $value)
 	{
-		return Input::{$this->http_method}($key) == $value;
+		return Input::post($key) == $value;
 	}
 
 
@@ -252,7 +250,7 @@ class Validation
 	*/
 	private function match_regex($key, $pattern)
 	{
-		return (preg_match($pattern, Input::{$this->http_method}($key)) == 1)
+		return (preg_match($pattern, Input::post($key)) == 1)
 			? true
 			: false;
 	}
@@ -266,7 +264,7 @@ class Validation
 	*/
 	private function min_length($key, $length = 0)
 	{
-		return strlen(Input::{$this->http_method}($key)) >= $length;
+		return strlen(Input::post($key)) >= $length;
 	}
 
 
@@ -278,7 +276,7 @@ class Validation
 	*/
 	private function max_length($key, $length = PHP_INT_MAX)
 	{
-		return strlen(Input::{$this->http_method}($key)) <= $length;
+		return strlen(Input::post($key)) <= $length;
 	}
 
 
@@ -290,7 +288,7 @@ class Validation
 	*/
 	private function exact_length($key, $length)
 	{
-		return strlen(Input::{$this->http_method}($key)) == $length;
+		return strlen(Input::post($key)) == $length;
 	}
 
 
@@ -302,7 +300,7 @@ class Validation
 	*/
 	private function min_val($key, $val)
 	{
-		return is_numeric(Input::{$this->http_method}($key)) && (int)Input::{$this->http_method}($key) >= (int)$val;
+		return is_numeric(Input::post($key)) && (int)Input::post($key) >= (int)$val;
 	}
 
 
@@ -314,7 +312,7 @@ class Validation
 	*/
 	private function max_val($key, $val)
 	{
-		return is_numeric(Input::{$this->http_method}($key)) && (int)Input::{$this->http_method}($key) <= (int)$val;
+		return is_numeric(Input::post($key)) && (int)Input::post($key) <= (int)$val;
 	}
 
 
@@ -325,7 +323,7 @@ class Validation
 	*/
 	private function is_numeric($key)
 	{
-		return is_numeric(Input::{$this->http_method}($key));
+		return is_numeric(Input::post($key));
 	}
 
 
@@ -336,7 +334,7 @@ class Validation
 	*/
 	private function is_int($key)
 	{
-		return is_int(Input::{$this->http_method}($key));
+		return is_int(Input::post($key));
 	}
 
 
@@ -347,7 +345,7 @@ class Validation
 	*/
 	private function is_float($key)
 	{
-		return is_float(Input::{$this->http_method}($key));
+		return is_float(Input::post($key));
 	}
 
 
@@ -360,8 +358,8 @@ class Validation
 	private function valid_ip($key, $version = 'v4')
 	{
 		return $version == 'v6'
-			? filter_var(Input::{$this->http_method}($key), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
-			: filter_var(Input::{$this->http_method}($key), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+			? filter_var(Input::post($key), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+			: filter_var(Input::post($key), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 	}
 
 
@@ -372,7 +370,7 @@ class Validation
 	*/
 	private function valid_uri($key)
 	{
-		return filter_var(Input::{$this->http_method}($key), FILTER_VALIDATE_URL);
+		return filter_var(Input::post($key), FILTER_VALIDATE_URL);
 	}
 
 
@@ -383,7 +381,7 @@ class Validation
 	*/
 	private function valid_email($key)
 	{
-		return filter_var(Input::{$this->http_method}($key), FILTER_VALIDATE_EMAIL);
+		return filter_var(Input::post($key), FILTER_VALIDATE_EMAIL);
 	}
 
 
@@ -395,7 +393,7 @@ class Validation
 	private function valid_emails($key)
 	{
 		// if newline exists in value, explode on newline, otherwise assume comma delimited
-		$emails = explode((strpos(Input::{$this->http_method}($key), "\n") !== false ? "\n" : ","), Input::{$this->http_method}($key));
+		$emails = explode((strpos(Input::post($key), "\n") !== false ? "\n" : ","), Input::post($key));
 
 		if(!is_array($emails) || !sizeof($emails))
 		{
@@ -428,7 +426,7 @@ class Validation
 		{
 			$message = '';
 
-			if(!call_user_func_array($callback, array(Input::{$this->http_method}($key), &$message)))
+			if(!call_user_func_array($callback, array(Input::post($key), &$message)))
 			{
 				$this->messages[$key] = $message;
 				return false;
