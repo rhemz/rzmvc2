@@ -3,7 +3,7 @@
 require_once(FRAMEWORK_PATH . 'autoload' . PHP_EXT);
 
 $config =& Config::get_instance();
-$config->load(array('environment', 'logging'));
+$config->load(array('environment', 'logging', 'session'));
 
 if(!$config->user_config_exists('environment'))
 {
