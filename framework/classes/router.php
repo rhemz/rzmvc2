@@ -60,7 +60,6 @@ class Router
 
 		foreach($this->path as $segment)
 		{
-			$this->index++;
 			if(!strlen($segment))
 			{
 				$segment = $this->config->get('routes.default_controller');
@@ -75,7 +74,7 @@ class Router
 				$this->controller_name = sprintf("%s_%s", $segment, $this->config->get('routes.controller_suffix'));
 				$this->controller = new $this->controller_name();
 
-				$this->action = $this->index == sizeof($this->path)
+				$this->action = ++$this->index == sizeof($this->path)
 					? $this->config->get('routes.default_function') 
 					: $this->path[$this->index];
 
