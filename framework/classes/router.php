@@ -18,12 +18,11 @@
 */
 class Router
 {
-	const Wildcard = '%var';
-
 	private $incoming;
 	private $path;
 	private $index = 0;
 	private $config;
+	private $wildcard;
 
 	private $controller_base;
 	private $controller_name;
@@ -42,6 +41,7 @@ class Router
 		$this->config =& Config::get_instance();
 		$this->config->load(array('paths', 'routes'));
 		
+		$this->wildcard = $this->config->get('routes.wildcard');
 		$this->controller_base = APPLICATION_PATH . $this->config->get('paths.controllers') . DIRECTORY_SEPARATOR;
 	}
 
@@ -113,7 +113,7 @@ class Router
 			$matched = true;
 			for($i=0; $i<sizeof($r_parts); $i++)
 			{
-				if((@($r_parts[$i] != $i_parts[$i])) && $r_parts[$i] != self::Wildcard)
+				if((@($r_parts[$i] != $i_parts[$i])) && $r_parts[$i] != $this->wildcard)
 				{
 					$matched = false;
 					break;
@@ -125,7 +125,7 @@ class Router
 				$marker = 0;
 				for($i=0; $i<sizeof($r_parts); $i++)
 				{
-					if($r_parts[$i] == self::Wildcard)
+					if($r_parts[$i] == $this->wildcard)
 					{
 						$dest = @str_replace(sprintf('$%s', ++$marker), $i_parts[$i], $dest);
 					}
