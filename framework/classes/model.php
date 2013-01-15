@@ -1,5 +1,7 @@
 <?php
 
+// todo: make driver objects singletons
+
 
 /**
 * The class all user defined Models inherit from.  Responsible for instantiating the appropriate
@@ -38,6 +40,16 @@ class Model
 		}
 
 		$this->db_reflection = new ReflectionClass($this->db_object);		
+	}
+
+
+	/**
+	* Ensure the close of any persistent database connections.
+	* This might have to be moved to a manual call that happens after framework execution depending on GC
+	*/
+	public function __destruct()
+	{
+		// $this->db_object->close();
 	}
 
 
