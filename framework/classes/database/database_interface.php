@@ -14,6 +14,8 @@ interface Database_Interface
 	public function close();
 
 	public function escape($str);
+
+	public function last_insert_id();
 }
 
 
