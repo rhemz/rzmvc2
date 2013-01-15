@@ -28,7 +28,15 @@ class Database_MySQLi implements Database_Interface
 
 	public function connect()
 	{
-		$this->conn = new mysqli($this->host, $this->user, $this->password, $this->database);
+		// mysqli persistent connections only became available in 5.3.0
+		/*
+		$this->conn = strnatcmp(phpversion(), '5.3.0') >= 0
+			? new mysqli('p:' . $this->host, $this->user, $this->password, $this->database)
+			: new mysqli($this->host, $this->user, $this->password, $this->database);
+		*/
+			
+		// for now just use regular mysqli
+		$this->conn	= new mysqli($this->host, $this->user, $this->password, $this->database);
 
 		if($this->conn->connect_error)
 		{
@@ -41,7 +49,7 @@ class Database_MySQLi implements Database_Interface
 	{
 		if(!$this->result = $this->conn->query(is_null($bindings) ? $sql : $this->parse_bindings($sql, $bindings)))
 		{
-			Logger::log($this->conn->mysqli_error, Log_Level::Warning);
+			Logger::log($this->conn->error, Log_Level::Warning);
 			// throw error or return false
 		}
 		return true;
@@ -61,6 +69,7 @@ class Database_MySQLi implements Database_Interface
 
 			return new Result_Set($result);
 		}
+		return new Result_Set();
 	}
 
 
@@ -76,6 +85,12 @@ class Database_MySQLi implements Database_Interface
 	}
 
 
+	public function last_insert_id()
+	{
+		return $this->conn->insert_id;
+	}
+
+
 	private function parse_bindings($sql, $bindings)
 	{
 		// todo: use actual mysqli lib binding
@@ -83,13 +98,23 @@ class Database_MySQLi implements Database_Interface
 		$qbits = explode('?', $sql);
 		$i = 0;
 
+		if(!is_null($bindings) && (sizeof($bindings) != substr_count($sql, '?')))
+		{
+			Logger::log(
+				sprintf('The number of query bindings(%d) passed does not match the SQL statement (%d)', 
+					sizeof($bindings), 
+					sizeof(array_filter($qbits))
+				), 
+				Log_Level::Error);
+		}
+
 		// start building bound query
 		$sql = $qbits[0];
 		foreach($bindings as $val)
 		{
 			$sql .= $this->translate_binding_datatype($val) . $qbits[++$i];
 		}
-
+		
 		return $sql;
 	}
 
