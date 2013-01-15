@@ -38,10 +38,11 @@ class Validation
 	private $reflection;
 	private $rules = array();
 	private $readable = array();
+	private $custom_messages = array();
 	private $last;
 
 	public $values = array();
-	public $messages = array();
+	private $messages = array();
 
 	private $rule_phrases = array(
 		'required'		=> '%s is required',
@@ -118,6 +119,19 @@ class Validation
 
 
 	/**
+	* Override the default validation message generation with a custom one.
+	* @param string $rule The rule to apply custom message for on a given key.
+	* @param string $message The custom message
+	*/
+	public function custom_message($rule, $message)
+	{
+		$this->custom_messages[$this->last][$rule] = $message;
+
+		return $this;
+	}
+
+
+	/**
 	* Run the currently registered validation rules.
 	* @return boolean
 	*/
@@ -141,7 +155,9 @@ class Validation
 					$valid = false;
 					if($rule != 'custom')
 					{
-						$this->messages[$key] = sprintf($this->rule_phrases[$rule], $this->readable[$key], $param);
+						$this->messages[$key] = isset($this->custom_messages[$key][$rule])
+							? $this->custom_messages[$key][$rule]
+							: sprintf($this->rule_phrases[$rule], $this->readable[$key], $param);
 					}
 					break;
 				}
