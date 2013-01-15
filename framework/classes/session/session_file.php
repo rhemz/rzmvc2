@@ -9,7 +9,7 @@ class Session_File extends Base_Session
 		$this->config = Config::get_instance()->get('session.*');
 		$this->file_path = SESSION_PATH . DIRECTORY_SEPARATOR . $this->config['file_prefix'];
 		$this->start();
-		Logger::log('session id: ' . session_id());
+		// Logger::log('session id: ' . session_id());
 	}
 
 	public function _open()
