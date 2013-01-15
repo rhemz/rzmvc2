@@ -6,7 +6,7 @@ class Result_Set
 	public $rows = array();
 
 
-	public function __construct($data)
+	public function __construct($data = array())
 	{
 		// make selected column names and their values accessible as instance variables
 		foreach($data as $row)
@@ -20,5 +20,11 @@ class Result_Set
 
 			$this->rows[] = $row_obj;
 		}
+	}
+
+
+	public function num_rows()
+	{
+		return sizeof($this->rows);
 	}
 }
