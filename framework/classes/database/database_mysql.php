@@ -66,6 +66,7 @@ class Database_MySQL implements Database_Interface
 
 			return new Result_Set($result);
 		}
+		return new Result_Set();
 	}
 
 
@@ -81,10 +82,21 @@ class Database_MySQL implements Database_Interface
 	}
 
 
+	public function last_insert_id()
+	{
+		return mysql_insert_id($this->conn);
+	}
+
+
 	private function parse_bindings($sql, $bindings)
 	{
 		$qbits = explode('?', $sql);
 		$i = 0;
+
+		if(!is_null($bindings) && sizeof($bindings) != sizeof(array_filter($qbits)))
+		{
+			Logger::log('The number of query bindings passed does not match the SQL statement', Log_Level::Error);
+		}
 
 		// start building bound query
 		$sql = $qbits[0];
