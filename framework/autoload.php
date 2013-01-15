@@ -13,6 +13,12 @@ function __autoload($class)
 		if(stripos($class, $suffix) !== false)
 		{
 			$class = str_ireplace($suffix, '', $class);
+
+			// account for models, controllers, and classes with the same name.  will be less messy once Config is used
+			foreach($paths as &$path)
+			{
+				$path .= sprintf("%ss", substr($suffix, 1));
+			}
 		}
 	}
 
