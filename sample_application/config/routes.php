@@ -12,5 +12,8 @@
 */
 
 $config['mappings'] = array(
-
+	
+	"/login"								=> '/account/login',
+	"/logout"								=> '/account/logout'
+	
 );

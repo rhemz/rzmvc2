@@ -145,9 +145,11 @@ class Router
 	{
 		header(HTTP_Status_Code::Not_Found);
 
+		$config =& Config::get_instance();
+
 		// make generic controller and show 404 page
 		$controller = new Controller();
-		$controller->load_view('common/404');
+		$controller->load_view($config->get('routes.404_view'));
 	}
 
 }
