@@ -9,7 +9,7 @@ class Rz_MVC
 {
 	private static $instance;
 	public $config;
-	protected $session;
+	public $session;
 
 	const Session_Driver_Prefix = 'Session';
 
