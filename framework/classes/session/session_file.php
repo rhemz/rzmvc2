@@ -7,9 +7,15 @@ class Session_File extends Base_Session
 	public function __construct()
 	{
 		$this->config = Config::get_instance()->get('session.*');
-		$this->file_path = SESSION_PATH . DIRECTORY_SEPARATOR . $this->config['file_prefix'];
+
+		ini_set('session.gc_maxlifetime', $this->config['timeout']);
+		ini_set('session.gc_probability', 1);
+		ini_set('session.gc_divisor', 10);
+
+
 		$this->start();
-		// Logger::log('session id: ' . session_id());
+
+		// $this->_set_session_handler();  don't need this for file-based sessions
 	}
 
 	public function _open()
@@ -24,37 +30,21 @@ class Session_File extends Base_Session
 
 	public function _read($id)
 	{
-		return file_exists($this->file_path . $id)
-			? file_get_contents($this->file_path . $id)
-			: false;
+		return true;
 	}
 
 	public function _write($id, $data)
 	{
-		return file_put_contents($this->file_path . $id, $data) === false
-			? false
-			: true;
+		return true;
 	}
 
 	public function _destroy($id)
 	{
-		session_unset();
-		if(file_exists($this->file_path . $id))
-		{
-			unlink($this->file_path . $id);
-		}
 		return true;
 	}
 
 	public function _gc()
 	{
-		foreach(glob(sprintf("%s*", $this->file_path)) as $session_file)
-		{
-			if((filemtime($session_file) + $this->config['timeout'] < $time) && file_exists($session_file))
-			{
-				unlink($session_file);
-			}
-		}
 		return true;
 	}
 
