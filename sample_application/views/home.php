@@ -1,16 +1,29 @@
 <?php $this->load_view('common/header', array('title' => 'Simple Todo', 'alt' => 'Todo Lists')); ?>
 
-<p>
-	<label for="lists">My Lists</label>
-	<select id="lists" name="lists">
-		<option value="">Select list...</option>
-		<?php if(!is_null($lists)): ?>
-			<?php foreach($lists as $list): ?>
-				<option value="<?=$list->id?>"><?=$list->name?></option>
-			<?php endforeach; ?>
-		<?php endif;?>
-	</select>
-</p>
+<div id="selectList">
+	<p>
+		<label for="lists">My Lists</label>
+		<select id="lists" name="lists">
+			<option value="">Select list...</option>
+			<?php if(!is_null($lists)): ?>
+				<?php foreach($lists as $list): ?>
+					<option value="<?=$list->id?>"><?=$list->name?></option>
+				<?php endforeach; ?>
+			<?php endif;?>
+		</select>
+
+		<label><a href="#" id="createListLink">Create</a> a new list.</label>
+	</p>
+</div>
+
+
+<div id="createList" style="display:none;">
+	<p>
+		<label for="newlist">List name</label>
+		<input type="text" id="newlist" name="newlist" value="" />
+	</p>
+</div>
+
 
 <div id="listview" style="display:none;">
 	<h4 id="listname">Current List</h4>
@@ -66,6 +79,30 @@
 			$('#listview').hide();
 		}
 		
+	});
+
+
+	$('#createListLink').live('click', function(e) {
+		
+		$('#selectList').slideUp(500);
+		$('#createList').slideDown(500);
+
+		$('#newlist').live('keypress', function(e) {
+			if(e.which == 13) {
+				var name = $(this).val();
+
+				$.postJSON('/list/create', { name: name }, function(data) {
+					if(data.success) {
+						$('#lists').append($('<option>', { value: data.id, text: name })).val(data.id).change();
+						$('#newlist').val('');
+					}
+					$('#createList').slideUp(500);
+					$('#selectList').slideDown(500);
+				});
+			}
+
+		});
+
 	});
 
 
