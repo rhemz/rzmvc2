@@ -88,7 +88,7 @@
 		$('#createList').slideDown(500);
 
 		$('#newlist').live('keypress', function(e) {
-			if(e.which == 13) {
+			if(e.which == 13 && $(this).val().length > 0) {
 				var name = $(this).val();
 
 				$.postJSON('/list/create', { name: name }, function(data) {
@@ -107,7 +107,7 @@
 
 
 	$('#newitem').live('keypress', function(e) {
-		if(e.which == 13) {
+		if(e.which == 13 && $(this).val().length > 0) {
 			var title = $(this).val();
 			$.postJSON('/list/add', { list_id: $('#lists').val(), text: title }, function(data) {
 				if(data.success) {
