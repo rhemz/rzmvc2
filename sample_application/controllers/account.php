@@ -31,15 +31,13 @@ class Account_Controller extends Controller
 			->rule('required')
 			->rule('min_length', 6)
 			->rule('max_length', 40)
-			->rule('equals', Input::post('password2'))
-			->custom_message('equals', 'The passwords must match');
+			->rule('equals', Input::post('password2'), 'The passwords must match');
 
 		$val->register('password2', 'Password confirmation')
 			->rule('required')
 			->rule('min_length', 6)
 			->rule('max_length', 40)
-			->rule('equals', Input::post('password1'))
-			->custom_message('equals', 'The passwords must match');
+			->rule('equals', Input::post('password1'), 'The passwords must match');
 
 
 		if(!$val->validate())
