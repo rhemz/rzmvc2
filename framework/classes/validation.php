@@ -35,7 +35,10 @@
 class Validation
 {
 	const Static_Callback_Delimeter = '::';
+	const Static_Callback_Parts = 2;
 	const HTTP_Method = 'POST';
+	const Custom_Rule = 'custom';
+
 
 	private $reflection;
 	private $rules = array();
@@ -152,7 +155,7 @@ class Validation
 				if(!$this->$rule($key, $param))
 				{
 					$valid = false;
-					if($rule != 'custom')
+					if($rule != self::Custom_Rule)
 					{
 						$this->messages[$key] = isset($this->custom_messages[$key][$rule])
 							? $this->custom_messages[$key][$rule]
@@ -461,7 +464,7 @@ class Validation
 	*/ 
 	private function custom($key, $callback)
 	{
-		if(sizeof($call = explode(self::Static_Callback_Delimeter, $callback)) == 2 && method_exists($call[0], $call[1]))
+		if(sizeof($call = explode(self::Static_Callback_Delimeter, $callback)) == self::Static_Callback_Parts && method_exists($call[0], $call[1]))
 		{
 			$message = '';
 
