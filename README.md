@@ -13,8 +13,8 @@ I've included a super-simple multi user todo-list manager as a sample applicatio
 usage of various framework components and handling common tasks i.e form validation, session management, etc.
 You can see a running version of the app (go ahead, create an account and click around) <a href="http://mvctest.russellz.com">here</a>.
 
-Once v1.0 is ready, I'll provide a link to a zipfile containing everything needed to build a web application
-quickly and efficiently.
+
+You can grab a zip ready for development/deployment <a href="http://mvc.russellz.com/files/rzmvc_dev_20130115.zip">here</a>.
 
 
 Full documentation to be completed after framework is in a completely usable state.  For now, the in-code
