@@ -93,9 +93,14 @@ class Database_MySQL implements Database_Interface
 		$qbits = explode('?', $sql);
 		$i = 0;
 
-		if(!is_null($bindings) && sizeof($bindings) != sizeof(array_filter($qbits)))
+		if(!is_null($bindings) && (sizeof($bindings) != substr_count($sql, '?')))
 		{
-			Logger::log('The number of query bindings passed does not match the SQL statement', Log_Level::Error);
+			Logger::log(
+				sprintf('The number of query bindings(%d) passed does not match the SQL statement (%d)', 
+					sizeof($bindings), 
+					sizeof(array_filter($qbits))
+				), 
+				Log_Level::Error);
 		}
 
 		// start building bound query
