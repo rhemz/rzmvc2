@@ -58,6 +58,17 @@ class Todo_Model extends Model
 	}
 
 
+	public function create_list($user_id, $name)
+	{
+		$sql = "INSERT INTO todo_list (user_id, name) VALUES (?, ?)";
+		if($this->query($sql, array($user_id, $name)))
+		{
+			return $this->last_insert_id();
+		}
+		return false;
+	}
+
+
 	public function add_item($list_id, $item)
 	{
 		$sql = "INSERT INTO todo_item (list_id, text) VALUES (?, ?)";
