@@ -26,6 +26,20 @@ class List_Controller extends Controller
 	}
 
 
+	public function create()
+	{
+		$name = Input::post('name');
+
+		if($list_id = $this->todo_model->create_list($this->session->get('user')->id, $name))
+		{
+			Output::return_json(array(
+				'success'	=> true,
+				'id'		=> $list_id));
+		}
+		Output::return_json(array('success' => false));
+	}
+
+
 	public function add()
 	{
 		$id = Input::post('list_id');
