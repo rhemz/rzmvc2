@@ -11,9 +11,7 @@ class User_Model extends Model
 
 	public function create_user($username, $email, $password)
 	{
-		$sql = "INSERT INTO
-					users (`name`, `email`, `password`)
-				VALUES (?, ?, ?)";
+		$sql = "INSERT INTO users (`name`, `email`, `password`) VALUES (?, ?, ?)";
 		if($this->query($sql, array($username, $email, sha1($password))))
 		{
 			return $this->last_insert_id();
