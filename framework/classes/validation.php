@@ -9,15 +9,17 @@
 		-min_length (value is at least N characters
 		-max_length (value is less than or equal to N characters)
 		-exact_length (value is exactly this long)
-		-min_val (numeric value is at least this)
-		-max_val (numeric value is less than or equal to this)
+		-greater_than (numeric value is at least this)
+		-less_than (numeric value is less than or equal to this)
 		-is_numeric (value is a valid number)
 		-is_int (value is a valud integer)
 		-is_float (value is a valid float)
+		-alphabetical (value contains only letters A-Z case insensitive)
 		-valid_ip (value is a valid IP address)
 		-valid_uri (value is a valid URI)
 		-valid_email (value is a valid email address)
 		-valid_emails (value is a newline or comma delimited set of valid email addresses)
+		-valid_base64 (value is a valid base64 encoded string)
 		-custom (allows user to use define a custom validation callback)
 
 	Syntax:
@@ -52,15 +54,17 @@ class Validation
 		'min_length'	=> '%s must be at least %s characters long',
 		'max_length'	=> '%s must be less than %s characters',
 		'exact_length'	=> '%s must be exactly %s characters',
-		'min_val'		=> '%s must be at least %s',
-		'max_val'		=> '%s must be less than %s',
+		'greater_than'	=> '%s must be at least %s',
+		'less_than'		=> '%s must be less than %s',
 		'is_numeric'	=> '%s must be a valid number',
 		'is_int'		=> '%s must be a valid integer',
 		'is_float'		=> '%s must be a valid decimal',
+		'alphabetical'	=> '%s must contain only alphabetical characters',
 		'valid_ip'		=> '%s must be a valid IP address',
 		'valid_uri'		=> '%s must be a valid URL',
 		'valid_email'	=> '%s is an invalid email address',
-		'valid_emails'	=> '%s must contain a valid list of email addresses'
+		'valid_emails'	=> '%s must contain a valid list of email addresses',
+		'valid_base64'	=> '%s is not a valid base-64 encoded string'
 	);
 	
 	
@@ -101,32 +105,27 @@ class Validation
 	* Add a rule to the last registered input key.  Refer to the comment at the top for all available rules.
 	* @param string $rule The rule to use
 	* @param mixed $param The optional value to be used (i.e. maximum length, value to match, etc)
+	* @param string $custom_message The optional custom message to be used in lieu of the generic rule message.
 	* @return $this
 	*/
-	public function rule($rule, $param = null)
+	public function rule($rule, $param = null, $custom_message = null)
 	{
 		if($this->reflection->hasMethod($rule) && !is_null($this->last))
 		{
 			$this->rules[$this->last][$rule] = $param;
+
+			if(!is_null($custom_message))
+			{
+				$this->custom_messages[$this->last][$rule] = $custom_message;
+			}
 		}
 		else
 		{
 			Logger::Log(sprintf("Rule '%s' does not exist, ignoring", $rule));
 		}
+
+
 		
-		return $this;
-	}
-
-
-	/**
-	* Override the default validation message generation with a custom one.
-	* @param string $rule The rule to apply custom message for on a given key.
-	* @param string $message The custom message
-	*/
-	public function custom_message($rule, $message)
-	{
-		$this->custom_messages[$this->last][$rule] = $message;
-
 		return $this;
 	}
 
@@ -314,7 +313,7 @@ class Validation
 	* @param int $val The minimum value
 	* @return boolean
 	*/
-	private function min_val($key, $val)
+	private function greater_than($key, $val)
 	{
 		return is_numeric(Input::post($key)) && (int)Input::post($key) >= (int)$val;
 	}
@@ -326,7 +325,7 @@ class Validation
 	* @param int $val The maximum value
 	* @return boolean
 	*/
-	private function max_val($key, $val)
+	private function less_than($key, $val)
 	{
 		return is_numeric(Input::post($key)) && (int)Input::post($key) <= (int)$val;
 	}
@@ -362,6 +361,17 @@ class Validation
 	private function is_float($key)
 	{
 		return is_float(Input::post($key));
+	}
+
+
+	/**
+	* Ensure a given user input contains only english alphabetical characters
+	* @param string $key The input key
+	* @return boolean
+	*/
+	private function alphabetical($key)
+	{
+		return preg_match('/[^A-Za-z]/', Input::post($key)) == 0 ? true : false;
 	}
 
 
@@ -425,6 +435,19 @@ class Validation
 		}
 
 		return true;
+	}
+
+
+	/**
+	* Ensure a given user input is a valid base64 encoded string
+	* @param string $key The input key
+	* @param return boolean
+	*/
+	private function valid_base64($key)
+	{
+		// just base64 decoding just ensures that the string does not contain any invalid characters.
+		// to properly validate, re-encode the decoded value and compare it to the input.
+		return base64_encode(base64_decode(Input::post($key))) === Input::post($key);
 	}
 
 
