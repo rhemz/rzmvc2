@@ -2,7 +2,7 @@
 
 
 <p>
-	The requested resource was not found within the RZmvc sample application.
+	The requested resource was not found within the rzMVC sample application.
 </p>
 
 <?php $this->load_view('common/footer'); ?>
