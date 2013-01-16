@@ -2,10 +2,9 @@ rz_mvc2
 ======
 
 Rz_MVC lightweight PHP MVC framework.  
-
 Framework sits inside 'framework' directory
 
-User application resides inside 'application' directory (for now its just a jumble of test controllers & models as I write the framework)
+User application resides inside 'application' directory
 
 Set your apache root to to www/ directory
 
