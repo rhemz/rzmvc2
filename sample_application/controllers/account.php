@@ -70,7 +70,7 @@ class Account_Controller extends Controller
 	public function login()
 	{
 		// if they're already logged in, send them back home
-		if($this->session->get('auth'))
+		if($this->session->get('user'))
 		{
 			Output::redirect('/');
 			return;
