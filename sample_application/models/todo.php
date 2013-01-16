@@ -52,9 +52,9 @@ class Todo_Model extends Model
 		if($this->query($sql, array($list_id)))
 		{
 			$result = $this->result();
-			return $result->num_rows() > 0 ? $result : null;
+			return $result->num_rows() > 0 ? $result : false;
 		}
-		return null;
+		return false;
 	}
 
 
