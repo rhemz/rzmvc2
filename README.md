@@ -1,7 +1,7 @@
-rz_mvc2
+rzMVC
 ======
 
-<b>RZmvc</b> lightweight PHP MVC framework.  
+<b>rzMVC</b> lightweight PHP MVC framework.  
 <ul>
 <li>Framework sits inside 'framework' directory</li>
 <li>User application resides inside 'application' directory</li>
