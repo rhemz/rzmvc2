@@ -35,9 +35,6 @@ abstract class Base_Session
 
 	protected function start()
 	{
-		$this->_set_session_path();
-		$this->_set_session_handler();
-
 		session_name(Config::get_instance()->get('session.name'));
 
 		session_start();
@@ -56,15 +53,6 @@ abstract class Base_Session
 		);
 	}
 
-	protected function _set_session_path()
-	{
-		if(!is_dir(SESSION_PATH))
-		{
-			mkdir(SESSION_PATH);
-		}
-
-		session_save_path(SESSION_PATH);
-	}
 
 	protected function _generate_key()
 	{
