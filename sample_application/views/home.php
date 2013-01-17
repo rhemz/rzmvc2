@@ -87,7 +87,7 @@
 		$('#selectList').slideUp(500);
 		$('#createList').slideDown(500);
 
-		$('#newlist').live('keypress', function(e) {
+		$('#newlist').live('keyup', function(e) {
 			if(e.which == 13 && $(this).val().length > 0) {
 				var name = $(this).val();
 
@@ -99,6 +99,9 @@
 					$('#createList').slideUp(500);
 					$('#selectList').slideDown(500);
 				});
+			} else if(e.keyCode == 27) {
+				$('#createList').slideUp(500);
+				$('#selectList').slideDown(500);
 			}
 
 		});
