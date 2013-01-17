@@ -11,10 +11,11 @@
 		-exact_length (value is exactly this long)
 		-greater_than (numeric value is at least this)
 		-less_than (numeric value is less than or equal to this)
-		-is_numeric (value is a valid number)
-		-is_int (value is a valud integer)
-		-is_float (value is a valid float)
+		-numerical (value is a valid number)
+		-integer (value is a valud integer)
+		-float (value is a valid float)
 		-alphabetical (value contains only letters A-Z case insensitive)
+		-alphanumeric (value contains only letters A-Z case insensitive and 0-9)
 		-valid_ip (value is a valid IP address)
 		-valid_uri (value is a valid URI)
 		-valid_email (value is a valid email address)
@@ -59,10 +60,11 @@ class Validation
 		'exact_length'	=> '%s must be exactly %s characters',
 		'greater_than'	=> '%s must be at least %s',
 		'less_than'		=> '%s must be less than %s',
-		'is_numeric'	=> '%s must be a valid number',
-		'is_int'		=> '%s must be a valid integer',
-		'is_float'		=> '%s must be a valid decimal',
+		'numerical'		=> '%s must be a valid number',
+		'integer'		=> '%s must be a valid integer',
+		'float'			=> '%s must be a valid decimal',
 		'alphabetical'	=> '%s must contain only alphabetical characters',
+		'alphanumeric'	=> '%s must contain only alphanumeric characters',
 		'valid_ip'		=> '%s must be a valid IP address',
 		'valid_uri'		=> '%s must be a valid URL',
 		'valid_email'	=> '%s is an invalid email address',
@@ -318,7 +320,7 @@ class Validation
 	*/
 	private function greater_than($key, $val)
 	{
-		return is_numeric(Input::post($key)) && (int)Input::post($key) >= (int)$val;
+		return numerical(Input::post($key)) && (int)Input::post($key) >= (int)$val;
 	}
 
 
@@ -330,7 +332,7 @@ class Validation
 	*/
 	private function less_than($key, $val)
 	{
-		return is_numeric(Input::post($key)) && (int)Input::post($key) <= (int)$val;
+		return numerical(Input::post($key)) && (int)Input::post($key) <= (int)$val;
 	}
 
 
@@ -339,9 +341,9 @@ class Validation
 	* @param string $key The input key
 	* @return boolean
 	*/
-	private function is_numeric($key)
+	private function numerical($key)
 	{
-		return is_numeric(Input::post($key));
+		return numerical(Input::post($key));
 	}
 
 
@@ -350,7 +352,7 @@ class Validation
 	* @param string $key The input key
 	* @return boolean
 	*/
-	private function is_int($key)
+	private function integer($key)
 	{
 		return is_int(Input::post($key));
 	}
@@ -361,7 +363,7 @@ class Validation
 	* @param string $key The input key
 	* @return boolean
 	*/
-	private function is_float($key)
+	private function float($key)
 	{
 		return is_float(Input::post($key));
 	}
@@ -375,6 +377,17 @@ class Validation
 	private function alphabetical($key)
 	{
 		return preg_match('/[^A-Za-z]/', Input::post($key)) == 0 ? true : false;
+	}
+
+
+	/**
+	* Ensure a given user input contains only whole numerical digits and english alphabetical characters
+	* @param string $key The input key
+	* @return boolean
+	*/
+	private function alphanumeric($key)
+	{
+		return preg_match('/[^A-Za-z0-9]/', Input::post($key)) == 0 ? true : false;
 	}
 
 
@@ -448,7 +461,7 @@ class Validation
 	*/
 	private function valid_base64($key)
 	{
-		// just base64 decoding just ensures that the string does not contain any invalid characters.
+		// simply base64 decoding just ensures that the string does not contain any invalid characters.
 		// to properly validate, re-encode the decoded value and compare it to the input.
 		return base64_encode(base64_decode(Input::post($key))) === Input::post($key);
 	}
