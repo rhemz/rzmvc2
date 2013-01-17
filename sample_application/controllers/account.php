@@ -17,6 +17,7 @@ class Account_Controller extends Controller
 
 		$val->register('username', 'Your username')
 			->rule('required')
+			->rule('alphanumeric')
 			->rule('min_length', 4)
 			->rule('max_length', 20)
 			->rule('custom', 'User_Validation::unique_username');
