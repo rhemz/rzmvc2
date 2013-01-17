@@ -1,6 +1,6 @@
 <?php
 
-class Session_File extends Base_Session
+class Session_File extends Session_Base
 {
 	private $file_path;
 
