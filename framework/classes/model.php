@@ -1,8 +1,5 @@
 <?php
 
-// todo: make driver objects singletons
-
-
 /**
 * The class all user defined Models inherit from.  Responsible for instantiating the appropriate
 * database driver from the application configuration and passing method calls onto said driver.
@@ -24,20 +21,8 @@ class Model
 		$config->load('database');
 
 		$type = sprintf("%s_%s", self::Driver_Prefix, $config->get('database.type'));
-		$this->db_object = new $type($config->get('database.*'));
-
-		try
-		{
-			$this->db_object->connect();
-		}
-		catch(Database_Connection_Exception $dce)
-		{
-			Logger::log($dce->getMessage(), Log_Level::Error);
-		}
-		catch(Database_Selection_Exception $dse)
-		{
-			Logger::log($dse->getMessage(), Log_Level::Error);
-		}
+		// now a singleton to avoid multiple connections
+		$this->db_object =& $type::get_instance($type, $config->get('database.*')); //new $type($config->get('database.*'));
 
 		$this->db_reflection = new ReflectionClass($this->db_object);		
 	}
