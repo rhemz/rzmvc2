@@ -1,7 +1,7 @@
 <?php
 
 
-class Database_MySQL implements Database_Interface
+class Database_MySQL extends Database_Base
 {
 	const Default_Port = 3306;
 

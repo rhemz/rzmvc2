@@ -1,7 +1,7 @@
 <?php
 
 
-class Database_PDO_MSSQL implements Database_Interface
+class Database_PDO_MSSQL extends Database_Base
 {
 	const PDO_Connection_String = "sqlsrv:Server=%s;Database=%s;";
 

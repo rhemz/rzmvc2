@@ -1,7 +1,7 @@
 <?php
 
 
-class Database_MySQLi implements Database_Interface
+class Database_MySQLi extends Database_Base
 {
 	const Default_Port = 3306;
 
@@ -47,6 +47,27 @@ class Database_MySQLi implements Database_Interface
 
 	public function query($sql, $bindings = null)
 	{
+		// figure out how to handle bools and other datatypes that don't map to mysql datatypes.  for now
+		// just use homegrown bindings.
+		/*
+		if(is_null($bindings))
+		{
+			$this->result = $this->conn->query($sql);
+		}
+		else
+		{
+			if(!$stmt = $this->conn->prepare($sql))
+			{
+				Logger::log(sprintf("Error preparing statement: %s", $this->conn->error), Log_Level::Error);
+			}
+
+			$bind_datatypes = '';
+			foreach($bindings as $binding)
+			{
+				$bind_datatypes .= $this->get_binding_typechar($binding);
+			}
+		}
+		*/
 		if(!$this->result = $this->conn->query(is_null($bindings) ? $sql : $this->parse_bindings($sql, $bindings)))
 		{
 			Logger::log($this->conn->error, Log_Level::Warning);
@@ -54,6 +75,9 @@ class Database_MySQLi implements Database_Interface
 		}
 		return true;
 	}
+
+
+
 
 
 	public function result()
@@ -135,6 +159,18 @@ class Database_MySQLi implements Database_Interface
 		}
 
 		return $val;
+	}
+
+
+	private function get_binding_typechar($binding)
+	{
+		if(is_int($binding)) return 'i';
+
+		if(is_float($binding)) return 'd';
+
+		if(is_string($binding)) return 's';
+
+		return 'b';
 	}
 
 
