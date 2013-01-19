@@ -5,6 +5,15 @@ abstract class Database_Base
 {
 	protected static $instance;
 
+	protected $host;
+	protected $port;
+	protected $user;
+	protected $password;
+	protected $database;
+
+	protected $conn;
+	protected $result;
+
 
 	abstract public function connect();
 
@@ -17,6 +26,8 @@ abstract class Database_Base
 	abstract public function escape($str);
 
 	abstract public function last_insert_id();
+
+	abstract protected function translate_binding_datatype($val);
 
 
 
@@ -40,6 +51,34 @@ abstract class Database_Base
 			}
 		}
 		return self::$instance;
+	}
+
+
+	protected function parse_bindings($sql, $bindings)
+	{
+		// todo: use actual mysqli lib binding
+		
+		$qbits = explode('?', $sql);
+		$i = 0;
+
+		if(!is_null($bindings) && (sizeof($bindings) != substr_count($sql, '?')))
+		{
+			Logger::log(
+				sprintf('The number of query bindings(%d) passed does not match the SQL statement (%d)', 
+					sizeof($bindings), 
+					sizeof(array_filter($qbits))
+				), 
+				Log_Level::Error);
+		}
+
+		// start building bound query
+		$sql = $qbits[0];
+		foreach($bindings as $val)
+		{
+			$sql .= $this->translate_binding_datatype($val) . $qbits[++$i];
+		}
+		
+		return $sql;
 	}
 
 

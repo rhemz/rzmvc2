@@ -5,7 +5,6 @@ class Database_PDO_MSSQL extends Database_Base
 {
 	const PDO_Connection_String = "sqlsrv:Server=%s;Database=%s;";
 
-	private $conn;
 	private $config;
 
 	public function __construct($config)

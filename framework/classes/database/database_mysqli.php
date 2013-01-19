@@ -4,17 +4,7 @@
 class Database_MySQLi extends Database_Base
 {
 	const Default_Port = 3306;
-
-	private $conn;
 	
-	private $host;
-	private $port;
-	private $user;
-	private $password;
-	private $database;
-
-	private $result;
-
 
 	public function __construct($config)
 	{
@@ -115,35 +105,7 @@ class Database_MySQLi extends Database_Base
 	}
 
 
-	private function parse_bindings($sql, $bindings)
-	{
-		// todo: use actual mysqli lib binding
-		
-		$qbits = explode('?', $sql);
-		$i = 0;
-
-		if(!is_null($bindings) && (sizeof($bindings) != substr_count($sql, '?')))
-		{
-			Logger::log(
-				sprintf('The number of query bindings(%d) passed does not match the SQL statement (%d)', 
-					sizeof($bindings), 
-					sizeof(array_filter($qbits))
-				), 
-				Log_Level::Error);
-		}
-
-		// start building bound query
-		$sql = $qbits[0];
-		foreach($bindings as $val)
-		{
-			$sql .= $this->translate_binding_datatype($val) . $qbits[++$i];
-		}
-		
-		return $sql;
-	}
-
-
-	private function translate_binding_datatype($val)
+	protected function translate_binding_datatype($val)
 	{
 		if(is_string($val))
 		{
@@ -164,7 +126,7 @@ class Database_MySQLi extends Database_Base
 
 	private function get_binding_typechar($binding)
 	{
-		if(is_int($binding)) return 'i';
+		if(is_int($binding) || is_bool($binding)) return 'i';
 
 		if(is_float($binding)) return 'd';
 
