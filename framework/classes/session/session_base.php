@@ -13,8 +13,6 @@ abstract class Session_Base
 	protected $data = array();
 	protected $config = array();
 	protected $timestamp = null;
-	protected $started = false;
-
 
 	abstract public function _open();
 
@@ -35,9 +33,17 @@ abstract class Session_Base
 
 	protected function start()
 	{
-		session_name(Config::get_instance()->get('session.name'));
+		// sanity check, just in case user tries to manually start up extra controllers
+		$active = function_exists('session_status')
+			? (session_status() == PHP_SESSION_ACTIVE)
+			: (strlen(session_id()) ? true : false);
+		
+		if(!$active)
+		{
+			session_name(Config::get_instance()->get('session.name'));
 
-		session_start();
+			session_start();
+		}
 	}
 
 
