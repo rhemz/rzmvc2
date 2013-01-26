@@ -15,6 +15,7 @@
 		$this->database = $config['database'];
 	}
 
+
 	public function connect()
 	{
 		$this->conn = pg_connect(
@@ -26,6 +27,7 @@
 			throw new Database_Connection_Exception('PostgreSQL', $this->host, $this->port, $this->user, $this->password);
 		}
 	}
+
 	
 	public function query($sql, $bindings = null)
 	{
@@ -35,6 +37,7 @@
 		}
 		return true;
 	}
+
 
 	public function result()
 	{
@@ -52,10 +55,12 @@
 		return new Result_Set();
 	}
 
+
 	public function close()
 	{
 		pg_close($this->conn);
 	}
+
 
 	public function escape($str)
 	{
