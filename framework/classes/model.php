@@ -34,7 +34,7 @@ class Model
 	*/
 	public function __destruct()
 	{
-		// $this->db_object->close();
+		$this->db_object->close();
 	}
 
 
