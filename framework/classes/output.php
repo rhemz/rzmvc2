@@ -4,7 +4,7 @@
 class Output
 {
 	const File_Mode = 'rb'; // read, binary no translate
-	const File_Chunk_Size = 1024*4;
+	const File_Chunk_Size = 4096;
 
 
 	public static function redirect($location, $perm = false)
