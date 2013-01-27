@@ -7,6 +7,11 @@ class Output
 	const File_Chunk_Size = 4096;
 
 
+	/**
+	* Send appropriate HTTP headers to redirect the client to another resource.
+	* @param string $location The URI to redirect to
+	* @param bool $perm Whether or not to send a permanent redirect header (default false)
+	*/
 	public static function redirect($location, $perm = false)
 	{
 		$perm
@@ -18,6 +23,13 @@ class Output
 	}
 
 
+	/**
+	* Send a local resource to the client via HTTP
+	* @param string $path The path to the local resource (file)
+	* @param string $name The optional file name to send the client.  If none is provided the original filename will be used
+	* @param string $mime_type The optional MIME-type header to send
+	* @param return bool
+	*/
 	public static function file($path, $name = null, $mime_type = null)
 	{
 		@apache_setenv('no-gzip', 1);
@@ -50,9 +62,35 @@ class Output
 		return false;
 	}
 
+
+	/**
+	* Send a JSON-encoded representation of the data to the client and end execution.
+	* @param mixed $data The payload
+	*/
 	public static function return_json($data)
 	{
 		echo json_encode($data);
 		exit();
-	} 
+	}
+
+
+	/**
+	* Send an XML-encoded representation of the data to the client and end application.
+	* @param mixed $data The payload
+	* @param string $root_node The name of the root node in the XML document
+	*/
+	public static function return_xml($data, $root_node = 'data')
+	{
+		if(is_array($data))
+		{
+			$xml = new SimpleXMLElement(sprintf('<%s/>', $root_node));
+			$helper = new Xml_Helper();
+
+			$helper->array_to_xml($data, $xml);
+			echo $xml->asXML();
+			exit();
+		}
+		return false;
+	}
+
 }
