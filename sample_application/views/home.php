@@ -60,7 +60,7 @@
 
 		if(!!$(this).val()) // if has value
 		{
-			$.getJSON('/list/get/' + $(this).val(), function(data) {
+			$.getJSON('/list/items/' + $(this).val(), function(data) {
 				if(data.length) {
 					var src = '';
 					$.each(data, function(i) {

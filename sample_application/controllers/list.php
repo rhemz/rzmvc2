@@ -1,6 +1,6 @@
 <?php
 
-class List_Controller extends Controller
+class List_Controller extends Controller_Rest
 {
 
 	private $todo_model;
@@ -16,7 +16,13 @@ class List_Controller extends Controller
 	}
 
 
-	public function get($id)
+	/*
+		With REST controllers, method names are prefixed by the HTTP action sent by the client.  
+		For example, an HTTP GET request sent to /list/items is mapped to the method get_items().
+		An HTTP POST sent to /list/create is mapped to post_create(), etc.
+	*/
+
+	public function get_items($id)
 	{
 		// permission check
 		if($this->todo_model->user_owns_list($this->session->get('user')->id, $id))
@@ -26,7 +32,7 @@ class List_Controller extends Controller
 	}
 
 
-	public function create()
+	public function post_create()
 	{
 		$name = Input::post('name');
 
@@ -40,7 +46,7 @@ class List_Controller extends Controller
 	}
 
 
-	public function add()
+	public function post_add()
 	{
 		$id = Input::post('list_id');
 		$text = Input::post('text');
@@ -60,7 +66,7 @@ class List_Controller extends Controller
 	}
 
 
-	public function checked($task_id)
+	public function get_checked($task_id)
 	{
 		if($this->todo_model->user_owns_task($this->session->get('user')->id, $task_id))
 		{
