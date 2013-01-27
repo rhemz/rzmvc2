@@ -140,6 +140,10 @@ class Config
 
 	/**
 	* Return the contents of a given configuration file path.  Used internally by the Config class
+	* @param string $path Path to the config file
+	* @throws Config_Not_Found_Exception Thrown if the specified configuration file does not exist
+	* @throws Config_Malformed_Exception Thrown if the configuration file contains an invalid config array
+	* @return array
 	*/
 	private function get_contents($path)
 	{
@@ -159,6 +163,11 @@ class Config
 	}
 
 
+	/**
+	* Test whether a user configuration file exists
+	* @param string $file The configuration filename
+	* @return bool
+	*/
 	public function user_config_exists($file)
 	{
 		return file_exists(sprintf($this->application_config, $file));
