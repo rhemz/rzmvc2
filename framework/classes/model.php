@@ -39,7 +39,7 @@ class Model
 
 
 	/**
-	* Overloaded PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
+	* Overridden PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
 	* to pass said call onto the database driver file.
 	*/
 	public function __call($method, $args)

@@ -30,6 +30,10 @@ class Controller_Rest extends Rz_Mvc
 	}
 
 
+	/**
+	* Overridden PHP magic method __call() to match incoming URI and HTTP request method to the
+	* corresponding REST method
+	*/
 	public function __call($method, $args)
 	{
 		$method = sprintf("%s%s", $this->method_prefix, $method);
