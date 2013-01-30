@@ -1,0 +1,9 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="rzMVC unit tests">
+
+			<file>validation_test.php</file>
+		
+		</testsuite>
+	</testsuites>
+</phpunit>
