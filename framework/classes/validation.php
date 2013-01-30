@@ -9,15 +9,15 @@
 		-min_length (value is at least N characters
 		-max_length (value is less than or equal to N characters)
 		-exact_length (value is exactly this long)
-		-greater_than (numeric value is at least this)
-		-less_than (numeric value is less than or equal to this)
+		-at_least (numeric value is at least this)
+		-at_most (numeric value is less than or equal to this)
 		-numerical (value is a valid number)
 		-integer (value is a valud integer)
 		-float (value is a valid float)
 		-alphabetical (value contains only letters A-Z case insensitive)
 		-alphanumeric (value contains only letters A-Z case insensitive and 0-9)
 		-valid_ip (value is a valid IP address)
-		-valid_uri (value is a valid URI)
+		-valid_uri (value is a valid absolute URI)
 		-valid_email (value is a valid email address)
 		-valid_emails (value is a newline or comma delimited set of valid email addresses)
 		-valid_base64 (value is a valid base64 encoded string)
@@ -58,15 +58,15 @@ class Validation
 		'min_length'	=> '%s must be at least %s characters long',
 		'max_length'	=> '%s must be less than %s characters',
 		'exact_length'	=> '%s must be exactly %s characters',
-		'greater_than'	=> '%s must be at least %s',
-		'less_than'		=> '%s must be less than %s',
+		'at_least'		=> '%s must be at least %s',
+		'at_most'		=> '%s must be less than %s',
 		'numerical'		=> '%s must be a valid number',
 		'integer'		=> '%s must be a valid integer',
 		'float'			=> '%s must be a valid decimal',
 		'alphabetical'	=> '%s must contain only alphabetical characters',
 		'alphanumeric'	=> '%s must contain only alphanumeric characters',
 		'valid_ip'		=> '%s must be a valid IP address',
-		'valid_uri'		=> '%s must be a valid URL',
+		'valid_uri'		=> '%s must be a valid absolute URL',
 		'valid_email'	=> '%s is an invalid email address',
 		'valid_emails'	=> '%s must contain a valid list of email addresses',
 		'valid_base64'	=> '%s is not a valid base-64 encoded string'
@@ -132,6 +132,20 @@ class Validation
 
 		
 		return $this;
+	}
+
+
+	/**
+	* Reset all registered keys, rules, messages, and outcomes.
+	*/ 
+	public function reset()
+	{
+		$this->rules = array();
+		$this->readable = array();
+		$this->messages = array();
+		$this->custom_messages = array();
+		$this->values = array();
+		$this->last = null;
 	}
 
 
@@ -318,9 +332,9 @@ class Validation
 	* @param int $val The minimum value
 	* @return boolean
 	*/
-	private function greater_than($key, $val)
+	private function at_least($key, $val)
 	{
-		return numerical(Input::post($key)) && (int)Input::post($key) >= (int)$val;
+		return is_numeric(Input::post($key)) && (int)Input::post($key) >= (int)$val;
 	}
 
 
@@ -330,9 +344,9 @@ class Validation
 	* @param int $val The maximum value
 	* @return boolean
 	*/
-	private function less_than($key, $val)
+	private function at_most($key, $val)
 	{
-		return numerical(Input::post($key)) && (int)Input::post($key) <= (int)$val;
+		return is_numeric(Input::post($key)) && (int)Input::post($key) <= (int)$val;
 	}
 
 
@@ -343,7 +357,7 @@ class Validation
 	*/
 	private function numerical($key)
 	{
-		return numerical(Input::post($key));
+		return is_numeric(Input::post($key));
 	}
 
 
@@ -441,10 +455,10 @@ class Validation
 		{
 			return false;
 		}
-
+		
 		foreach($emails as $email)
 		{
-			if(!$this->valid_email($email))
+			if(!filter_var(trim($email), FILTER_VALIDATE_EMAIL))
 			{
 				return false;
 			}
@@ -463,7 +477,7 @@ class Validation
 	{
 		// simply base64 decoding just ensures that the string does not contain any invalid characters.
 		// to properly validate, re-encode the decoded value and compare it to the input.
-		return base64_encode(base64_decode(Input::post($key))) === Input::post($key);
+		return strlen(Input::post($key)) && base64_encode(base64_decode(Input::post($key))) === Input::post($key);
 	}
 
 
