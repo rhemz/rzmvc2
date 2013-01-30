@@ -6,7 +6,6 @@
 */
 class Input
 {
-
 	
 	/**
 	* Retrieve a value from HTTP GET.  If not present, fall back to the optionally supplied default value.
@@ -73,6 +72,15 @@ class Input
 		return isset($source[$key]) && !is_null($source[$key]) && strlen($source[$key]);
 	}
 
+	/**
+	* Determine whether or not a form has been submitted with this request.
+	* @return boolean
+	*/
+	public static function form_submitted()
+	{
+		return isset($_POST);
+	}
+
 
 	/**
 	* Get the client's accessing IP address.  If for whatever reason it is not available, fall back to 0.0.0.0
@@ -83,6 +91,24 @@ class Input
 		return isset($_SERVER['REMOTE_ADDR'])
 			? $_SERVER['REMOTE_ADDR']
 			: $default;
+	}
+
+
+	/**
+	* Attempt to get the client's true IP address by checking for a variety of headers.
+	* @return string|false
+	*/
+	public static function true_ip()
+	{
+		$fields = array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR');
+		foreach($fields as $field)
+		{
+			if(isset($_SERVER[$field]))
+			{
+				return $_SERVER[$field];
+			}
+		}
+		return false;
 	}
 
 
@@ -110,6 +136,16 @@ class Input
 
 
 	/**
+	* Determine whether the incoming request is executed by the command line
+	* @return boolean
+	*/
+	public static function is_CLI()
+	{
+		return php_sapi_name() == 'cli';
+	}
+
+
+	/**
 	* Retrieve the current HTTP request method.
 	* @return string
 	*/
@@ -127,7 +163,5 @@ class Input
 	{
 		return $_SERVER['HTTP_USER_AGENT'];
 	}
-
-
 
 }
