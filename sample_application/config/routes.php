@@ -17,3 +17,5 @@ $config['mappings'] = array(
 	"/logout"								=> '/account/logout'
 	
 );
+
+$config['404_view'] = 'common/404';
