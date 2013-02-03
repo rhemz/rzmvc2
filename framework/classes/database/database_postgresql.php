@@ -8,8 +8,8 @@
 
  	public function __construct($config)
 	{
-		$this->host = $config['host'];
-		$this->post = is_null($config['port']) ? self::Default_Port : $config['port'];
+		$this->host = $config['hostname'];
+		$this->port = is_null($config['port']) ? self::Default_Port : $config['port'];
 		$this->user = $config['username'];
 		$this->password = $config['password'];
 		$this->database = $config['database'];
@@ -68,9 +68,29 @@
 	}
 
 
+	public function last_insert_id()
+	{
+		$id = pg_fetch_row(pg_query($this->conn, "SELECT lastval();"));
+		return $id[0];
+	}
+
+
 	protected function translate_binding_datatype($val)
 	{
+		if(is_string($val))
+		{
+			return sprintf("'%s'", $this->escape($val));
+		}
+		else if(is_bool($val))
+		{
+			return ($val === true) ? 1 : 0;
+		}
+		else if(is_null($val))
+		{
+			return 'NULL';
+		}
 
+		return $val;
 	}
 	
  }
