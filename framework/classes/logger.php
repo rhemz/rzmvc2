@@ -12,6 +12,12 @@ class Logger
 	private static $config;
 
 
+	/**
+	* Log a message.  Depending on the user configuration, message may either be displayed, written to a 
+	* logfile, or both.  Error level logs end application execution.
+	* @param string $message The log message
+	* @param Log_Level $level The log leve
+	*/
 	public static function log($message, $level = Log_Level::Notice)
 	{
 		// only do this once
@@ -64,6 +70,10 @@ class Logger
 	}
 
 
+	/**
+	* Simple convenience method for wrapping print_r output in <pre> tags if a debugger is not available.
+	* @param mixed $object The variable to dump.
+	*/
 	public static function print_r($object)
 	{
 		echo '<pre>';
