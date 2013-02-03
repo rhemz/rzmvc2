@@ -8,7 +8,7 @@ $config['default_controller'] = 'home';
 
 $config['default_function'] = 'index';
 
-$config['404_view'] = 'common/404';
+$config['404_view'] = '404';
 
 $config['controller_suffix'] = 'controller';
 $config['model_suffix'] = 'model';
