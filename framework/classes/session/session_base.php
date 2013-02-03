@@ -42,7 +42,7 @@ abstract class Session_Base
 		{
 			session_name(Config::get_instance()->get('session.name'));
 
-			session_start();
+			@session_start();
 		}
 	}
 
