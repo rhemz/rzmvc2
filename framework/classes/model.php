@@ -41,6 +41,8 @@ class Model
 	/**
 	* Overridden PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
 	* to pass said call onto the database driver file.
+	* @param string $method Method to invoke
+	* @param array|null $args The optional method parameters to pass
 	*/
 	public function __call($method, $args)
 	{
