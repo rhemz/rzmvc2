@@ -37,6 +37,17 @@ class User_Model extends Model
 	}
 
 
+	public function user_exists($name)
+	{
+		$sql = "SELECT name FROM users WHERE name = ?";
+		if($this->query($sql, array($name)))
+		{
+			$result = $this->result();
+			return ($result->num_rows() > 0);
+		}
+		return false;
+	}
+
 	public function get_user_by_email($email)
 	{
 		$sql = "SELECT id, name FROM users WHERE email = ?";

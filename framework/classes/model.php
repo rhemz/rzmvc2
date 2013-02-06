@@ -40,7 +40,7 @@ class Model
 	{
 		if(!is_null($this->db_object))
 		{
-			$this->db_object->close();
+			// $this->db_object->close(); // going to move this to shutdown handler.
 		}
 	}
 
