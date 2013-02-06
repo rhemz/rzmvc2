@@ -44,14 +44,38 @@ class Rz_MVC
 			}
 		}
 
-		if(file_exists($v = APPLICATION_PATH . $this->config->get('paths.views') . DIRECTORY_SEPARATOR . $view . PHP_EXT))
+		// check application views, then fallback to framework views
+		foreach(array(APPLICATION_PATH, FRAMEWORK_PATH) as $source)
 		{
-			include($v);
+			if(file_exists($v = $source . $this->config->get('paths.views') . DIRECTORY_SEPARATOR . $view . PHP_EXT))
+			{
+				include($v);
+				return;
+			}
 		}
-		else
+		Logger::log(sprintf("%s view cannot be found", $view), Log_Level::Error);
+	}
+
+
+	/**
+	* If enabled in global configuration, rzMVC catches fatal PHP errors and displays them in an alternate view
+	* in addition to ensuring that the custom session handler is properly closed.  Registered in bootstrap.
+	*/
+	public static function hook_shutdown()
+	{
+		// if something broke real bad
+		if($e = error_get_last())
 		{
-			Logger::log(sprintf("%s view cannot be found", $view), Log_Level::Error);
+			if(isset($e['type']) && 
+				$e['type'] == E_PARSE || 
+				$e['type'] == E_ERROR || 
+				$e['type'] == E_COMPILE_ERROR)
+			{
+				self::get_instance()->load_view('php_error', array('error' => $e));
+			}
 		}
+
+		session_write_close(); // make sure to close custom session handler
 	}
 
 
@@ -60,6 +84,10 @@ class Rz_MVC
 	*/
 	public static function &get_instance()
 	{
+		if(is_null(self::$instance))
+		{
+			new Rz_MVC();
+		}
 		return self::$instance;
 	}
 
