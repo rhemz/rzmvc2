@@ -26,8 +26,7 @@ class User_Validation
 		$message = sprintf("Sorry, but '%s' is already taken.  Try another name.", $value);
 		$model = new User_Model();
 
-		// could write a function for checking username uniqueness, but quicker to just repurpose get_password()
-		return $model->get_password($value) === false;
+		return !$model->user_exists($value);
 	}
 
 
