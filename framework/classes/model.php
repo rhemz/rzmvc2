@@ -19,12 +19,16 @@ class Model
 	{
 		$config =& Config::get_instance();
 		$config->load('database');
+		$type = $config->get('database.type');
 
-		$type = sprintf("%s_%s", self::Driver_Prefix, $config->get('database.type'));
-		// now a singleton to avoid multiple connections
-		$this->db_object =& $type::get_instance($type, $config->get('database.*')); //new $type($config->get('database.*'));
+		if(!is_null($type))
+		{
+			$type = sprintf("%s_%s", self::Driver_Prefix, $type);
+			// now a singleton to avoid multiple connections
+			$this->db_object =& $type::get_instance($type, $config->get('database.*')); //new $type($config->get('database.*'));
 
-		$this->db_reflection = new ReflectionClass($this->db_object);		
+			$this->db_reflection = new ReflectionClass($this->db_object);	
+		}
 	}
 
 
@@ -34,15 +38,16 @@ class Model
 	*/
 	public function __destruct()
 	{
-		$this->db_object->close();
+		if(!is_null($this->db_object))
+		{
+			$this->db_object->close();
+		}
 	}
 
 
 	/**
 	* Overridden PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
 	* to pass said call onto the database driver file.
-	* @param string $method Method to invoke
-	* @param array|null $args The optional method parameters to pass
 	*/
 	public function __call($method, $args)
 	{
