@@ -30,7 +30,10 @@ class Logger
 		// print message if enabled for the log level
 		if(self::$config['print'] & $level)
 		{
-			echo sprintf("%s %s %s %s", PHP_EOL, $message, (self::$config['print_html'] ? '<br />' : null), PHP_EOL);
+			$level == Log_Level::Error
+				? get_mvc()->load_view('error', array('message' => $message))
+				: print(sprintf("%s %s %s %s", PHP_EOL, $message, (self::$config['print_html'] ? '<br />' : null), PHP_EOL));
+			
 		}
 
 		// write to file. might end up doing more than writing a line
