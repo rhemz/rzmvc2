@@ -93,31 +93,30 @@ class Output
 
 
 
-		/**
-		* Recursive function to turn an associative array into XML
-		* @param mixed $data The payload
-		* @param ref SimpleXMLElement &$xml_obj The reference to the SimpleXML object
-		*/
-		private function array_to_xml($data, &$xml_obj)
+	/**
+	* Recursive function to turn an associative array into XML
+	* @param mixed $data The payload
+	* @param ref SimpleXMLElement &$xml_obj The reference to the SimpleXML object
+	*/
+	private function array_to_xml($data, &$xml_obj)
+	{
+		foreach($data as $key => $val)
 		{
-			foreach($data as $key => $val)
+			if(is_array($val))
 			{
-				if(is_array($val))
+				if(!is_numeric($key))
 				{
-					if(!is_numeric($key))
-					{
-						$node = $xml_obj->addChild("$key");
-						self::array_to_xml($val, $node);
-					}
-					else
-					{
-						self::array_to_xml($val, $xml_obj);
-					}
+					$node = $xml_obj->addChild("$key");
+					self::array_to_xml($val, $node);
 				}
 				else
 				{
-					$xml_obj->addChild("$key", "$val");
+					self::array_to_xml($val, $xml_obj);
 				}
+			}
+			else
+			{
+				$xml_obj->addChild("$key", "$val");
 			}
 		}
 	}
