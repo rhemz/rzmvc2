@@ -1,14 +1,32 @@
 <html>
 <head>
-	<title>Error</title>
+	<title>A fatal error has occurred</title>
+
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif; font-size: 12px;
+		}
+
+		.errorBox {
+			border: 2px dashed #545454;
+			background-color: #EDADAD;
+			width: 860px;
+			margin-left: 40px;
+			margin-top: 50px;
+			padding: 8px;
+		}
+	</style>
 </head>
 
 <body>
 
-	<p>
-		Whoops, something broke on line <?=$error['line']?> in <?=$error['file']?>.  
-		<?php Logger::print_r($error); ?>
-	</p>
+	<div class="errorBox">
+
+		<p>
+			<?=$message?>
+		</p>
+
+	</div>
 
 </body>
 </html>
