@@ -1,7 +1,11 @@
 <?php
 
-// log level bits for generating a bitmask in application config
-
+/**
+* Log level enumeration.  A bitmask can be used in the application logging config to define
+* the level of logging that is displayed to the user or written to a corresponding logfile.
+* One could choose to print just notices and warnings by setting Log_Level::Notice | Log_Level::Warning,
+* while writing Log_Level::Warning | Log_Level::Error level messages to a logfile.
+*/
 class Log_Level
 {
 	const Error = 1;
