@@ -75,7 +75,14 @@ class Rz_MVC
 			}
 		}
 
+		// write any remaining session data
 		session_write_close(); // make sure to close custom session handler
+
+		// close database connection if one exists
+		if(!is_null($db =& Database_Base::get_instance()))
+		{
+			$db->close();
+		}
 	}
 
 
