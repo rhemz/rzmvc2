@@ -33,19 +33,6 @@ class Model
 
 
 	/**
-	* Ensure the close of any persistent database connections.
-	* This might have to be moved to a manual call that happens after framework execution depending on GC
-	*/
-	public function __destruct()
-	{
-		if(!is_null($this->db_object))
-		{
-			// $this->db_object->close(); // going to move this to shutdown handler.
-		}
-	}
-
-
-	/**
 	* Overridden PHP magic method __call(), whenever $this->methodname() is called by a child class, this attempts
 	* to pass said call onto the database driver file.
 	*/
