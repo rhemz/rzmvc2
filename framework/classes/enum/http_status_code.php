@@ -1,6 +1,9 @@
 <?php
 
-
+/**
+* Helper enumeration containing a common list of frequently used HTTP response strings ready
+* to be sent with header()
+*/
 class HTTP_Status_Code
 {
 	const OK = 'HTTP/1.1 200 OK';
