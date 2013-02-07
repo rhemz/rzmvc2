@@ -24,7 +24,7 @@ abstract class Session_Base
 
 	abstract public function _destroy($id);
 
-	abstract public function _gc();
+	abstract public function _gc($age);
 
 	abstract public function set($key, $data);
 
