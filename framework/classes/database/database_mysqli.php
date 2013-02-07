@@ -65,10 +65,7 @@ class Database_MySQLi extends Database_Base
 		}
 		return true;
 	}
-
-
-
-
+	
 
 	public function result()
 	{
