@@ -43,7 +43,7 @@ class Session_File extends Session_Base
 		return true;
 	}
 
-	public function _gc()
+	public function _gc($age)
 	{
 		return true;
 	}
