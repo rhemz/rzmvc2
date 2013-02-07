@@ -1,6 +1,12 @@
 <?php
 
 
+/**
+* All database driver classes extend Database_Base and implement the abstract methods necessary
+* for basic database interaction.  It is possible to extend database drivers beyond the scope 
+* of what the base database class defines, and make that functionality available to all user-created
+* models automatically given the base Model class's overriding PHP's magic __call() method.
+*/
 abstract class Database_Base
 {
 	protected static $instance;
@@ -31,6 +37,13 @@ abstract class Database_Base
 
 
 
+	/**
+	* When called for the first time, spins up an instance of the appropriate database driver as 
+	* defined in the application database config.
+	* @param string $type The database type (mysql, mysqli, postgres, pdo_mssql, etc)
+	* @param array $config The database connection configuration array loaded from app config
+	* @return Database driver
+	*/
 	public static function &get_instance($type = null, $config = null)
 	{
 		if(is_null(self::$instance) && !is_null($type) && !is_null($config))
@@ -54,6 +67,15 @@ abstract class Database_Base
 	}
 
 
+	/**
+	* Common method used by all database drivers, responsible for binding query parameters
+	* to their corresponding values by datatype.  Relies on individual driver's implementation of 
+	* translate_binding_datatype(), as different databases handle datatypes differently (i.e. mysql
+	* escapes single quotes with a \, mssql escapes quotes with another quote, etc).
+	* @param string $sql The sql query to be bound
+	* @param array $bindings An array containing the data to bind to the query
+	* @return string The bound sql query
+	*/
 	protected function parse_bindings($sql, $bindings)
 	{
 		// todo: use actual mysqli lib binding
@@ -80,18 +102,6 @@ abstract class Database_Base
 		
 		return $sql;
 	}
-
-
-	/*
-	public function __destruct()
-	{
-		if(!is_null(self::$instance))
-		{
-			$this->close();
-		}
-	}
-	*/
-
 
 }
 
