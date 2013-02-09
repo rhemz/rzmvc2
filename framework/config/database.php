@@ -1,7 +1,7 @@
 <?php
 
 
-$config['type'] 		= ''; // currently supported are 'mysql', 'mysqli', 'postgresql', 'pdo_mssql'
+$config['type'] 		= null; // currently supported are 'mysql', 'mysqli', 'postgresql', 'pdo_mssql'
 $config['hostname'] 	= '';
 $config['port']			= '';
 $config['username']		= '';
