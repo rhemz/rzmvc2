@@ -100,7 +100,7 @@ class Account_Controller extends Controller
 
 	public function logout()
 	{
-		$this->session->set('user', null);
+		$this->session->delete('user');
 		Output::redirect('/');
 	}
 }
