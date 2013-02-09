@@ -1,6 +1,6 @@
 <?php
 
-define('APPLICATION_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../sample_application') . DIRECTORY_SEPARATOR);
+define('APPLICATION_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../application') . DIRECTORY_SEPARATOR);
 
 define('FRAMEWORK_PATH', realpath(__DIR__ . DIRECTORY_SEPARATOR . '../framework') . DIRECTORY_SEPARATOR);
 
