@@ -1,5 +1,10 @@
 <?php
 
+$config['default_controller'] = 'home';
+
+
+
+
 /*
 	Wildcard:
 		%var
