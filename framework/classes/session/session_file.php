@@ -47,19 +47,5 @@ class Session_File extends Session_Base
 	{
 		return true;
 	}
-
-
-	public function set($key, $data)
-	{
-		$_SESSION[$key] = $data;
-		return true;
-	}
-
-
-	public function get($key, $default = null)
-	{
-		return isset($_SESSION[$key])
-			? $_SESSION[$key]
-			: $default;
-	}
+	
 }
