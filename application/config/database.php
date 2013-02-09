@@ -1,7 +1,7 @@
 <?php
 
 
-$config['type'] 		= 'mysqli';
+$config['type'] 		= null;
 $config['hostname'] 	= 'localhost';
 $config['port'] 		= null;
 $config['username']		= '';
