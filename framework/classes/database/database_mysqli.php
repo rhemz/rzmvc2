@@ -13,6 +13,8 @@ class Database_MySQLi extends Database_Base
 		$this->user = $config['username'];
 		$this->password = $config['password'];
 		$this->database = $config['database'];
+
+		$this->unicode = $config['unicode'];
 	}
 
 
@@ -31,6 +33,11 @@ class Database_MySQLi extends Database_Base
 		if($this->conn->connect_error)
 		{
 			throw new Database_Connection_Exception('MySQLi', $this->host, $this->port, $this->user, $this->password);
+		}
+
+		if($this->unicode)
+		{
+			$this->query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
 		}
 	}
 

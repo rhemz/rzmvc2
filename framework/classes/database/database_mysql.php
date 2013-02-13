@@ -13,6 +13,8 @@ class Database_MySQL extends Database_Base
 		$this->user = $config['username'];
 		$this->password = $config['password'];
 		$this->database = $config['database'];
+
+		$this->unicode = $config['unicode'];
 	}
 
 
@@ -27,6 +29,11 @@ class Database_MySQL extends Database_Base
 		if(!mysql_select_db($this->database, $this->conn))
 		{
 			throw new Database_Selection_Exception(sprintf("Could not use the specified MySQL database (%s) on %s", $this->database, $this->host));
+		}
+
+		if($this->unicode)
+		{
+			$this->query("SET NAMES 'utf8' COLLATE 'utf8_unicode_ci'");
 		}
 	}
 

@@ -7,3 +7,5 @@ $config['port']			= '';
 $config['username']		= '';
 $config['password']		= '';
 $config['database']		= '';
+
+$config['unicode']		= true;

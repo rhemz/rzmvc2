@@ -17,6 +17,8 @@ abstract class Database_Base
 	protected $password;
 	protected $database;
 
+	protected $unicode;
+
 	protected $conn;
 	protected $result;
 
