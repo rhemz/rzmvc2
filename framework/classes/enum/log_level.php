@@ -6,7 +6,7 @@
 * One could choose to print just notices and warnings by setting Log_Level::Notice | Log_Level::Warning,
 * while writing Log_Level::Warning | Log_Level::Error level messages to a logfile.
 */
-class Log_Level
+class Log_Level extends Enum
 {
 	const Error = 1;
 	const Warning = 2;

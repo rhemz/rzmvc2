@@ -4,7 +4,7 @@
 * Helper enumeration containing a common list of frequently used HTTP response strings ready
 * to be sent with header()
 */
-class HTTP_Status_Code
+class HTTP_Status_Code extends Enum
 {
 	const OK = 'HTTP/1.1 200 OK';
 	const Moved_Permanently = 'HTTP/1.1 301 Moved Permanently';
