@@ -2,6 +2,7 @@
 
 function __autoload($class)
 {
+	$class = strtolower($class);
 	$config =& Config::get_instance();
 
 	$suffixes = array(
@@ -15,7 +16,7 @@ function __autoload($class)
 		if(stripos($class, ($s = sprintf("_%s", $suffix))) !== false)
 		{
 			$class = str_ireplace($s, '', $class);
-			require_once(APPLICATION_PATH . $path . DIRECTORY_SEPARATOR . strtolower($class) . PHP_EXT);
+			require_once(APPLICATION_PATH . $path . DIRECTORY_SEPARATOR . $class . PHP_EXT);
 			return;
 		}
 	}
@@ -28,7 +29,7 @@ function __autoload($class)
 		{
 			if( $item->isDir() 
 				&& !in_array($i, $config->get('paths.nolook'))
-				&& file_exists($p = $item->getPathname() . DIRECTORY_SEPARATOR . strtolower($class) . PHP_EXT))
+				&& file_exists($p = $item->getPathname() . DIRECTORY_SEPARATOR . $class . PHP_EXT))
 			{
 				require_once($p);
 				return;
