@@ -21,14 +21,16 @@ class Model
 		$config->load('database');
 		$type = $config->get('database.type');
 
-		if(!is_null($type))
+		if(is_null($type))
 		{
-			$type = sprintf("%s_%s", self::Driver_Prefix, $type);
-			// now a singleton to avoid multiple connections
-			$this->db_object =& $type::get_instance($type, $config->get('database.*')); //new $type($config->get('database.*'));
-
-			$this->db_reflection = new ReflectionClass($this->db_object);	
+			Logger::log('No database configuration is present', Log_Level::Error);
 		}
+
+		$type = sprintf("%s_%s", self::Driver_Prefix, $type);
+		// now a singleton to avoid multiple connections
+		$this->db_object =& $type::get_instance($type, $config->get('database.*')); //new $type($config->get('database.*'));
+
+		$this->db_reflection = new ReflectionClass($this->db_object);	
 	}
 
 
