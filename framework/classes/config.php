@@ -27,6 +27,8 @@ class Config
 	{
 		$this->framework_config = FRAMEWORK_PATH . self::Config_Dir . DIRECTORY_SEPARATOR . '%s' . PHP_EXT;
 		$this->application_config = APPLICATION_PATH . self::Config_Dir . DIRECTORY_SEPARATOR . '%s' . PHP_EXT;
+
+		$this->load('global');
 	}
 
 
@@ -123,6 +125,18 @@ class Config
 			// was throwing an exception, but it would be super obnoxious to wrap try around every config get.
 			Logger::log(sprintf('The supplied selector (%s) is invalid.  Expected format: "section%skey"', $key, self::Config_Delimiter));
 			return null;
+		}
+
+		// if smart config loading is enabled in application config, config files don't have to be loaded before being queried
+		if($this->config['global']['smart_config_loading'] && !isset($this->config[$parts[0]]))
+		{
+			$this->load($parts[0]);
+		}
+
+		if(!isset($this->config[$parts[0]]))
+		{
+			Logger::log(sprintf("The '%s' configuration file has not been loaded or cannot be found.  Unable to find '%s'", 
+				$parts[0], $key), Log_Level::Warning);
 		}
 
 		if(isset($this->config[$parts[0]]) && $parts[1] == self::Config_Wildcard)
