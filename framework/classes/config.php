@@ -133,11 +133,13 @@ class Config
 			$this->load($parts[0]);
 		}
 
+		/*
 		if(!isset($this->config[$parts[0]]))
 		{
 			Logger::log(sprintf("The '%s' configuration file has not been loaded or cannot be found.  Unable to find '%s'", 
 				$parts[0], $key), Log_Level::Warning);
 		}
+		*/
 
 		if(isset($this->config[$parts[0]]) && $parts[1] == self::Config_Wildcard)
 		{
