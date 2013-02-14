@@ -3,20 +3,15 @@
 
 class Logger
 {
-	const Notice = 'notices.log';
-	const Warning = 'warnings.log';
-	const Error = 'errors.log';
-
 	const Write_Mode = 'a+';
 
 	private static $config;
-
 
 	/**
 	* Log a message.  Depending on the user configuration, message may either be displayed, written to a 
 	* logfile, or both.  Error level logs end application execution.
 	* @param string $message The log message
-	* @param Log_Level $level The log leve
+	* @param Log_Level $level The log level
 	*/
 	public static function log($message, $level = Log_Level::Notice)
 	{
@@ -40,15 +35,15 @@ class Logger
 		switch($level)
 		{
 			case Log_Level::Notice:
-				self::write_logfile(Log_Level::Notice, self::Notice, $message);
+				self::write_logfile(Log_Level::Notice, self::$config['notice_path'], $message);
 				break;
 
 			case Log_Level::Warning:
-				self::write_logfile(Log_Level::Warning, self::Warning, $message);
+				self::write_logfile(Log_Level::Warning, self::$config['warning_path'], $message);
 				break;
 
 			case Log_Level::Error:
-				self::write_logfile(Log_Level::Error, self::Error, $message);
+				self::write_logfile(Log_Level::Error, self::$config['error_path'], $message);
 				exit(); // die on error level.  maybe should not?
 				break;
 		}
