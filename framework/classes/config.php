@@ -23,7 +23,7 @@ class Config
 	/**
 	* Create instance of Config.  Never called directly, only by static method get_instance()
 	*/
-	public function __construct()
+	private final function __construct()
 	{
 		$this->framework_config = FRAMEWORK_PATH . self::Config_Dir . DIRECTORY_SEPARATOR . '%s' . PHP_EXT;
 		$this->application_config = APPLICATION_PATH . self::Config_Dir . DIRECTORY_SEPARATOR . '%s' . PHP_EXT;
