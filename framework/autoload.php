@@ -2,33 +2,32 @@
 
 function __autoload($class)
 {
-	// todo: use config class
-	
-	$paths = array(APPLICATION_PATH, FRAMEWORK_PATH);
-	$nolook = array('config', 'views');
-	$suffixes = array('_controller', '_model');
+	$config =& Config::get_instance();
 
-	foreach($suffixes as $suffix)
+	$suffixes = array(
+		$config->get('paths.controller_suffix') => $config->get('paths.controllers'),
+		$config->get('paths.model_suffix') => $config->get('paths.models')
+	);
+
+	// look for user defined models and controllers first
+	foreach($suffixes as $suffix => $path)
 	{
-		if(stripos($class, $suffix) !== false)
+		if(stripos($class, ($s = sprintf("_%s", $suffix))) !== false)
 		{
-			$class = str_ireplace($suffix, '', $class);
-
-			// account for models, controllers, and classes with the same name.  will be less messy once Config is used
-			foreach($paths as &$path)
-			{
-				$path .= sprintf("%ss", substr($suffix, 1));
-			}
+			$class = str_ireplace($s, '', $class);
+			require_once(APPLICATION_PATH . $path . DIRECTORY_SEPARATOR . $class . PHP_EXT);
+			return;
 		}
 	}
 
-	// look in application directory first, then framework
-	foreach($paths as $path)
+
+	// if not found, look everywhere. application directory first, then framework
+	foreach(array(APPLICATION_PATH, FRAMEWORK_PATH) as $path)
 	{
 		foreach(new RecursiveIteratorIterator($i = new RecursiveDirectoryIterator($path)) as $item)
 		{
 			if( $item->isDir() 
-				&& !in_array($i, $nolook)
+				&& !in_array($i, $config->get('paths.nolook'))
 				&& file_exists($p = $item->getPathname() . DIRECTORY_SEPARATOR . strtolower($class) . PHP_EXT))
 			{
 				require_once($p);
@@ -36,4 +35,5 @@ function __autoload($class)
 			}
 		}
 	}
+	
 }
