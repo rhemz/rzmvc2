@@ -7,7 +7,7 @@ require_once(FRAMEWORK_PATH . 'autoload' . PHP_EXT);
 
 // load core framework and application configs
 $config =& Config::get_instance();
-$config->load(array('logging', 'paths', 'routes', 'environment', 'session'));
+$config->load(array('paths', 'routes', 'environment', 'logging', 'session'));
 
 // register custom shutdown and error handler hooks
 if($config->get('global.framework_handle_fatal_errors'))
