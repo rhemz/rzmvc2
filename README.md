@@ -16,7 +16,7 @@ tasks i.e form validation, session management, database interaction, etc. You ca
 app (go ahead, create an account and click around) <a href="http://mvctest.russellz.com"><b>here</b></a>.
 
 
-You can grab a zip ready for development/deployment <a href="http://mvc.russellz.com/files/rzmvc_dev_20130205.zip"><b>here</b></a>.
+You can grab a zip ready for development/deployment <a href="http://mvc.russellz.com/files/rzmvc_dev_20130214.zip"><b>here</b></a>.
 
 
 Full documentation to be completed after framework is in a completely usable state.  For now, the in-code
