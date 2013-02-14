@@ -5,6 +5,7 @@ function __autoload($class)
 	$class = strtolower($class);
 	$config =& Config::get_instance();
 
+	// consider building this in bootstrap and using it in here, since this function is called so often
 	$suffixes = array(
 		$config->get('paths.controller_suffix') => $config->get('paths.controllers'),
 		$config->get('paths.model_suffix') => $config->get('paths.models')
