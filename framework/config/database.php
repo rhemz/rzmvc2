@@ -8,4 +8,4 @@ $config['username']		= '';
 $config['password']		= '';
 $config['database']		= '';
 
-$config['unicode']		= true;
+$config['unicode']		= false;
