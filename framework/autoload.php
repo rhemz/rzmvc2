@@ -17,8 +17,17 @@ function __autoload($class)
 		if(stripos($class, ($s = sprintf("_%s", $suffix))) !== false)
 		{
 			$class = str_ireplace($s, '', $class);
-			require_once(APPLICATION_PATH . $path . DIRECTORY_SEPARATOR . $class . PHP_EXT);
-			return;
+			$path = APPLICATION_PATH . $path . DIRECTORY_SEPARATOR;
+
+			foreach(new RecursiveIteratorIterator(
+				new RecursiveDirectoryIterator($path, FilesystemIterator::NEW_CURRENT_AND_KEY | FilesystemIterator::SKIP_DOTS)) as $item)
+			{
+				if($class == basename($item->getPathname(), PHP_EXT))
+				{
+					require_once($item->getPathname());
+					return;
+				}
+			}
 		}
 	}
 
