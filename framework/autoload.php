@@ -39,7 +39,7 @@ class Autoloader
 		foreach(new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator(FRAMEWORK_PATH . $this->config->get('paths.framework_classes'))) as $item)
 		{
-			if(!$item->isDir() && $item->isFile() && $item->getExtension() == 'php')
+			if(!$item->isDir() && $item->isFile())
 			{
 				$this->tree[FRAMEWORK_PATH][] = $item->getPathname();
 			}
@@ -51,7 +51,7 @@ class Autoloader
 		foreach(new RecursiveIteratorIterator(
 			$i = new RecursiveDirectoryIterator(APPLICATION_PATH)) as $item)
 		{
-			if(!in_array($i, $nolook) && !$item->isDir() && $item->isFile() && $item->getExtension() == 'php')
+			if(!in_array($i, $nolook) && !$item->isDir() && $item->isFile())
 			{
 				$this->tree[APPLICATION_PATH][] = $item->getPathname();
 			}
