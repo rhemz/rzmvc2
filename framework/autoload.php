@@ -1,6 +1,10 @@
 <?php
 
 
+/**
+* The Autoloader.  Responsible for locating and including application & framework classes.  User-defined
+* Models and Controllers are located by naming convention & directories in the paths configuration.
+*/
 class Autoload
 {
 	const CM_Branch = 'CM';
@@ -10,6 +14,9 @@ class Autoload
 	private $config;
 
 
+	/**
+	* Instantiate autoloader
+	*/
 	private function __construct()
 	{
 		$this->config =& Config::get_instance();
@@ -24,6 +31,9 @@ class Autoload
 	}
 
 
+	/**
+	* Get the autoloader singleton
+	*/
 	public static function &get_instance()
 	{
 		if(is_null(self::$instance))
@@ -34,6 +44,10 @@ class Autoload
 	}
 
 
+	/**
+	* Build arrays of the filesystem paths for the user application & framework directories.  This cache is searched whenever undefined 
+	* classes are referenced, rather than repeatedly scanning them.  Called by the constructor.
+	*/
 	private function build_cache()
 	{
 		// build framework cache
@@ -69,6 +83,10 @@ class Autoload
 	}
 
 
+	/**
+	* Registered with spl_autoload, called whenever a new, currently undefined class is referenced.
+	* @param string $class The class name
+	*/
 	public function load_class($class)
 	{
 		// look for user defined models & controllers first
@@ -80,6 +98,12 @@ class Autoload
 	}
 
 
+	/**
+	* Actually look for the class in the directory caches.  First searches for user-defined Models and Controllers, then
+	* moves on to the greater application directory & framework directory.
+	* @param string $class The class name
+	* @return string|false $file The absolute filesystem path
+	*/
 	private function search_cache($class)
 	{
 		// look for user defined models & controllers first
@@ -112,6 +136,12 @@ class Autoload
 	}
 
 
+	/**
+	* Parse the filename from the absolute path and test it against the classname.
+	* @param string $class The classname
+	* @param array $tree The filesystem tree
+	* @return string|false
+	*/
 	private function check_tree($class, $tree)
 	{
 		foreach($tree as $file)
@@ -126,6 +156,9 @@ class Autoload
 	}
 
 
+	/**
+	* Register the autoloader class with PHP.  Called by the bootstrap.
+	*/
 	public function register()
 	{
 		spl_autoload_register(array('Autoload', 'load_class'));
