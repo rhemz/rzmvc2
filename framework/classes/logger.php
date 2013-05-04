@@ -62,7 +62,7 @@ class Logger
 			}
 
 			$handle = fopen(LOG_PATH . DIRECTORY_SEPARATOR . $file, self::Write_Mode);
-			fwrite($handle, sprintf("%s: %s%s", date(DATE_RFC822), $message, PHP_EOL));
+			fwrite($handle, sprintf('%s: %s%s', date(DATE_RFC822), $message, PHP_EOL));
 			fclose($handle);
 		}
 	}

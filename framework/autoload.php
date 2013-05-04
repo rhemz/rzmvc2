@@ -69,15 +69,10 @@ class Autoload
 		{
 			if(!in_array($i, $nolook) && !$item->isDir() && $item->isFile())
 			{
-				if(!count(array_filter(array_map("strpos", array_fill(0, count($v), $item->getPathname()), $v), "is_int")) == count($v))
-				{
-					$this->tree[APPLICATION_PATH][] = $item->getPathname();
-				}
-				else
-				{
-					$this->tree[self::CM_Branch][] = $item->getPathname();	
-				}
-				
+				$branch = !count(array_filter(array_map('strpos', array_fill(0, count($v), $item->getPathname()), $v), 'is_int')) == count($v)
+					? APPLICATION_PATH
+					: self::CM_Branch;
+				$this->tree[$branch][] = $item->getPathname();
 			}
 		}
 	}
@@ -109,7 +104,7 @@ class Autoload
 		// look for user defined models & controllers first
 		foreach($this->suffixes as $suffix => $path)
 		{
-			if(stripos($class, ($s = sprintf("_%s", $suffix))) !== false)
+			if(stripos($class, ($s = sprintf('_%s', $suffix))) !== false)
 			{
 				$class = str_ireplace($s, '', $class);
 				foreach($this->tree[self::CM_Branch] as $file)
