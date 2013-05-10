@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>The is my home view!</title>
+	<title>This is my home view!</title>
 </head>
 
 <body>
