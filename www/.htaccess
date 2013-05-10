@@ -1,5 +1,7 @@
 <IfModule mod_rewrite.c>
 
+	SetEnv ENVIRONMENT Development
+	
 	RewriteEngine on
 	RewriteCond $1 !^(index\.php|public|robots\.txt)
 	RewriteRule ^(.*)$ /index.php/$1 [L]
