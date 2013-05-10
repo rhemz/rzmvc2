@@ -55,7 +55,8 @@ class Config
 	{
 		/*
 			1. Determine paths to file
-				-if /config/ENVIRONMENT/file exists, set path to that
+				-if $env = Environment::None, set path to to /config/file
+				-if /config/$env||ENVIRONMENT/file exists, set path to that
 				-otherwise set path to /config/file 
 			2. If application config exists
 				-attempt to load corresponding framework config
@@ -64,8 +65,6 @@ class Config
 			3. If application config does not exist, load framework config
 			4. If framework config does not exist, throw error
 		*/
-
-		// $env = is_null($env) ? Environment::toString(ENVIRONMENT)
 
 		if(!is_array($files))
 		{
@@ -76,10 +75,10 @@ class Config
 		{
 			if(isset($this->config[$file])) continue;
 
-			$ac = defined('ENVIRONMENT')
-				&& file_exists($p = sprintf($this->application_config, strtolower(Environment::to_string(ENVIRONMENT)) . DIRECTORY_SEPARATOR . $file))
+			$ac = (!is_null($env) && $env == Environment::None) ? sprintf($this->application_config, $file) : (defined('ENVIRONMENT')
+				&& file_exists($p = sprintf($this->application_config, strtolower(Environment::to_string((!is_null($env) ? $env : ENVIRONMENT))) . DIRECTORY_SEPARATOR . $file))
 				? $p
-				: sprintf($this->application_config, $file);
+				: sprintf($this->application_config, $file));
 				
 			$fc = sprintf($this->framework_config, $file);
 			
