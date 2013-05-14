@@ -16,9 +16,9 @@ tasks i.e form validation, session management, database interaction, etc. You ca
 app (go ahead, create an account and click around) <a href="http://mvctest.russellz.com"><b>here</b></a>.
 
 
-You can grab a stable zip ready for development/deployment <a href="http://mvc.russellz.com/files/rzmvc_m2_20130409.zip"><b>here</b></a>.
+You can grab a stable zip ready for development/deployment <a href="http://mvc.russellz.com/files/rzmvc_m3_20130513.zip"><b>here</b></a>.
 
-The latest version is milestone2, 04/09/2013.
+The latest version is milestone3, 05/13/2013.
 
 
 Full documentation to be completed after framework is in a completely usable state.  For now, the in-code
