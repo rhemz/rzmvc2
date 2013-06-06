@@ -161,6 +161,45 @@ class Input
 
 
 	/**
+	* Retrieve the 'route-worthy' section of the request URI.  This removes the query string and any additional parameters that may be 
+	* present.  Optionally accepts a segment parameter.
+	* Ex:  
+	* Incoming URI: /get/version/1.2.3?gzipped=true
+	* Input::uri()    => returns '/get/version/1.2.3'
+	* Input::uri(3)   => return '1.2.3'
+	* @param int $segment The URI segment number to retrieve.  Default value will be returned if segment does't exist
+	* @param string $default The fallback default value if no header is present
+	* @return mixed
+	*/
+	public static function uri($segment = null, $default = null)
+	{
+		$uri = preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']);
+
+		if(is_int($segment))
+		{
+			$parts = explode('/', $uri);
+			if($segment < sizeof($parts))
+			{
+				return $parts[$segment];
+			}
+			return $default;
+		}
+
+		return $uri;
+	}
+
+
+	/**
+	* Retrieve the full request URI received by the webserver, including any query strings
+	* @return string
+	*/
+	public static function full_uri()
+	{
+		return $_SERVER['REQUEST_URI'];
+	}
+
+
+	/**
 	* Determine whether the current application request is an AJAX request or not.
 	* @return boolean
 	*/
