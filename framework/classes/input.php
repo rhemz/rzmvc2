@@ -175,7 +175,7 @@ class Input
 	{
 		$uri = preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']);
 
-		if(is_int($segment))
+		if(is_int($segment) && $segment > 0)
 		{
 			$parts = explode('/', $uri);
 			if($segment < sizeof($parts))
