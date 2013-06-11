@@ -24,9 +24,10 @@ class Controller_Rest extends Rz_Mvc
 	public function _has_method($method)
 	{
 		$rc = new ReflectionClass($this);
+		$method = $this->method_prefix . $method;
 
 		// find function by http method
-		return $rc->hasMethod($this->method_prefix . $method);
+		return $rc->hasMethod($method) && $rc->getMethod($method)->isPublic();
 	}
 
 

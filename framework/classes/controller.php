@@ -20,6 +20,6 @@ class Controller extends Rz_MVC
 	public function _has_method($method)
 	{
 		$rc = new ReflectionClass($this);
-		return $rc->hasMethod($method);
+		return $rc->hasMethod($method) && $rc->getMethod($method)->isPublic();
 	}
 }
