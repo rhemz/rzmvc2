@@ -495,7 +495,7 @@ class Validation
 		{
 			$message = '';
 
-			if(!call_user_func_array($callback, array(Input::post($key), &$message)))
+			if(!call_user_func_array($callback, array(Input::post($key), &$message, &$this)))
 			{
 				$this->messages[$key] = $message;
 				return false;
