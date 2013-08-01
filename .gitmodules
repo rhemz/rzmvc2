@@ -1,6 +1,6 @@
-[submodule "rzmvc2-framework"]
-	path = rzmvc2-framework
-	url = https://github.com/rhemz/rzmvc2-framework.git
 [submodule "framework"]
 	path = framework
 	url = https://github.com/rhemz/rzmvc2-framework.git
+[submodule "application"]
+	path = application
+	url = https://github.com/rhemz/rzmvc2-application.git
