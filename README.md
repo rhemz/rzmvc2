@@ -10,10 +10,10 @@ rzMVC
 </ul>
 
 
-I've included a super-simple multi user todo-list manager as a sample application as a means of demonstrating
-what you can do with a few simple classes, as well as usage of various framework components and handling common 
-tasks i.e form validation, session management, database interaction, etc. You can see a running version of the 
-app (go ahead, create an account and click around) <a href="http://mvctest.russellz.com"><b>here</b></a>.
+You can see a simple sample application built ontop of rzMVC <a href="http://mvctest.russellz.com">running here</a>,
+demonstrating what can be done with a few simple classes &amp; usage of various framework components to handle common
+tasks such as form validation, session management, DB interaction, etc.  The source code is located 
+<a href="https://github.com/rhemz/rzmvc2-sample-application">here</a>.
 
 
 You can grab a stable zip ready for development/deployment <a href="http://mvc.russellz.com/releases/rzmvc_m4_20130610.zip"><b>here</b></a>.
